@@ -1,0 +1,18 @@
+{
+  "name": "template_chrome_extension",
+  "version": "0.0.1",
+  "description": "Template chrome extension build with esbuild and typescript",
+  "main": "index.js",
+  "repository": "https://github.com/emelcd/template_chrome_extension",
+  "author": "emelcd raticorps@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "dev": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --watch --minify",
+    "build": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --minify"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.181",
+    "esbuild": "^0.14.36",
+    "typescript": "^4.6.3"
+  }
+}
