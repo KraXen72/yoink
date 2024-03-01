@@ -1,5 +1,5 @@
-import Turndown from 'turndown';
 import { Readability } from '@mozilla/readability';
+import turndownService from './turndown-service';
 
 function convertDate(date) {
 	var yyyy = date.getFullYear().toString();
@@ -86,7 +86,7 @@ for (const [key, info] of Object.entries(metaSelectors)) {
 }
 meta.tags ??= []
 if (Array.isArray(meta.tags)) meta.tags.push("clippings")
-console.log(meta, Object.entries(meta))
+// console.log(meta, Object.entries(meta))
 
 const {
 	title,
@@ -100,15 +100,9 @@ const selection = getSelectionHtml();
 const markdownify = selection || content;
 let vaultName = (vault) ? '&vault=' + encodeURIComponent(`${vault}`) : ''
 
-// console.log(content)
+console.log(content)
 
-const markdownBody = new Turndown({
-	headingStyle: 'atx',
-	hr: '---',
-	bulletListMarker: '-',
-	codeBlockStyle: 'fenced',
-	emDelimiter: '*',
-}).turndown(markdownify);
+const markdownBody = turndownService.turndown(markdownify);
 
 /* YAML front matter as tags render cleaner with special chars  */
 const fileContent = "---\n"
