@@ -1,1 +1,11 @@
-(()=>{var s=async()=>{let n=document.querySelector("#techs"),o=(await chrome.storage.sync.get("technologies")).technologies;for(let t of o){let c=document.createElement("li"),e=document.createElement("a");e.href=t.url,e.textContent=t.name,c.appendChild(e),n.appendChild(c)}};s();})();
+(() => {
+  // src/popup.ts
+  async function trigger() {
+    (async () => {
+      const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+      await chrome.tabs.sendMessage(tab.id, { cmd: "process" });
+    })();
+  }
+  document.getElementById("process-btn").addEventListener("click", trigger);
+  trigger();
+})();

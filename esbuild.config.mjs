@@ -18,7 +18,7 @@ const ctx = await esbuild.context({
   },
   bundle: true,
   outdir: 'extension',
-  minify: true,
+  minify: false,
 	plugins: [ buildLogger ]
 })
 

@@ -19,7 +19,12 @@
   },
   "dependencies": {
     "@mozilla/readability": "^0.5.0",
+    "rehype": "^13.0.1",
+    "rehype-dom-parse": "^5.0.0",
+    "rehype-rewrite": "^4.0.2",
+    "rehype-stringify": "^10.0.0",
     "turndown": "^7.1.2",
-    "turndown-plugin-gfm": "^1.0.2"
+    "turndown-plugin-gfm": "^1.0.2",
+    "unified": "^11.0.4"
   }
 }
