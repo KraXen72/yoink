@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
 		"strictNullChecks": false,
-		"lib": ["ES2020"]
+		"lib": ["ES2022", "DOM"]
 	}
 }
