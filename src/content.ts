@@ -9,6 +9,12 @@ function convertDate(date) {
 	var ddChars = dd.split('');
 	return yyyy + '-' + (mmChars[1] ? mm : "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
 }
+
+function getMetaContent(attr, value) {
+	var element = document.querySelector(`meta[${attr}='${value}']`);
+	return element ? element.getAttribute("content").trim() : "";
+}
+
 function getSelectionHtml() {
 	var html = "";
 	if (typeof window.getSelection != "undefined") {
@@ -71,6 +77,7 @@ for (const [key, info] of Object.entries(metaSelectors)) {
 	let value: string | string[] = ("attr" in info) ? el.getAttribute(info.attr) : el.textContent
 	if ("deli" in info) value = value.split(info.deli)
 	if (Array.isArray(meta[key])) {
+		//@ts-ignore
 		meta[key].push(...(Array.isArray(value) ? value : [value]))
 	} else {
 		meta[key] ??= value
@@ -85,13 +92,15 @@ const {
 	title,
 	byline,
 	content
-} = new Readability(document.cloneNode(true)).parse();
+} = new Readability(document.cloneNode(true), { keepClasses: true }).parse();
 
 const fileName = getFileName(title);
 
 const selection = getSelectionHtml();
 const markdownify = selection || content;
 let vaultName = (vault) ? '&vault=' + encodeURIComponent(`${vault}`) : ''
+
+// console.log(content)
 
 const markdownBody = new Turndown({
 	headingStyle: 'atx',
@@ -100,12 +109,6 @@ const markdownBody = new Turndown({
 	codeBlockStyle: 'fenced',
 	emDelimiter: '*',
 }).turndown(markdownify);
-
-// Utility function to get meta content by name or property
-function getMetaContent(attr, value) {
-	var element = document.querySelector(`meta[${attr}='${value}']`);
-	return element ? element.getAttribute("content").trim() : "";
-}
 
 /* YAML front matter as tags render cleaner with special chars  */
 const fileContent = "---\n"
