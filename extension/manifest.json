@@ -1,6 +1,6 @@
 {
-  "name": "Template Chrome Extension",
-  "description": "Template Chrome Extension build with TypeScript and esBuild",
+  "name": "yoink",
+  "description": "HTML to markdown clipper",
   "version": "0.0.1",
   "manifest_version": 3,
   "background": {

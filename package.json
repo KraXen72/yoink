@@ -7,12 +7,18 @@
   "author": "emelcd raticorps@gmail.com",
   "license": "MIT",
   "scripts": {
-    "dev": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --watch --minify",
-    "build": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --minify"
+    "dev2": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --watch --minify",
+    "build2": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --minify",
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.181",
-    "esbuild": "^0.14.36",
-    "typescript": "^4.6.3"
+    "@types/chrome": "^0.0.262",
+    "esbuild": "^0.20.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.5.0",
+    "turndown": "^7.1.2"
   }
 }
