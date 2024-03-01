@@ -1,23 +1,34 @@
 import Turndown from 'turndown';
 import { Readability } from '@mozilla/readability';
 
-/* Optional vault name */
+// obsidian stuff
 const vault = "";
-
-/* Optional folder name such as "Clippings/" */
 const folder = "Clippings/";
+let tags = ["clippings"];
+const meta = {}
 
-/* Optional tags  */
-let tags = "clippings";
+const defaultMetaKey = "textContent"
+const metaSelectors = {
+	"subtitle": {qs:`meta[property="og:description"]`},
+	"description": {qs:`meta[name="description"]`},
+	"published": {qs:`meta[property="article:published_time"]`, attr: "content"},
+	"modified": {qs:`meta[property="article:modified_time"]`, attr: "content"},
+	"author": {qs: 'meta[property="author"]', attr: "content"},
+	"tags": {qs: `meta[name="parsely-tags"]`, attr: "content", deli: ","}
+}
 
-/* Parse the site's meta keywords content into tags, if present */
-if (document.querySelector('meta[name="keywords" i]')) {
-	var keywords = document.querySelector('meta[name="keywords" i]').getAttribute('content').split(',');
+for (const [key, info] of Object.entries(metaSelectors)) {
+	// const el = document // why is this unrecognized
+}
 
-	keywords.forEach(function (keyword) {
-		let tag = ' ' + keyword.split(' ').join('');
-		tags += tag;
-	});
+function getMetadata() {
+	if (document.querySelector('meta[name="keywords" i]')) {
+		document.querySelector('meta[name="keywords" i]')
+			.getAttribute('content').split(',')
+			.map(kw => {
+				tags.push(' ' + kw.split(' ').join(''))
+			})
+	}
 }
 
 function getSelectionHtml() {
@@ -136,7 +147,7 @@ const fileContent =
 	+ 'clipped: ' + today + '\n'
 	+ 'published: ' + published + '\n'
 	+ 'topics: \n'
-	+ 'tags: [' + tags + ']\n'
+	+ `tags: ${tags.join(" ")}\n`
 	+ '---\n\n'
 	+ markdownBody;
 
