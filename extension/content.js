@@ -10919,7 +10919,8 @@ ${caption}${tableContent}
     let domm = dom;
     const parser = new DOMParser();
     const reasons = {
-      mathjax3: dom.querySelector("mjx-container") !== null && (mjx3Data || dom.querySelector("mjx-container")?.dataset?.originalMjx)
+      mathjax3: dom.querySelector("mjx-container") !== null && (mjx3Data || dom.querySelector("mjx-container")?.dataset?.originalMjx),
+      mathjax2: dom.querySelector(`script[type="math/tex"]`) !== null
     };
     if (Object.values(reasons).some(Boolean)) {
       let mjx3Data2 = globalThis.MathJax && globalThis.MathJax.startup.document.getMathItemsWithin(dom);
@@ -10927,7 +10928,7 @@ ${caption}${tableContent}
       let mjxNodeCounter = 0;
       const vfile2 = await unified().use(parse5).use(rehypeStringify).use(lib_default, {
         rewrite: (node, index2, parent) => {
-          if (node.type === "element" && node.tagName === "mjx-container") {
+          if (reasons.mathjax3 && node.type === "element" && node.tagName === "mjx-container") {
             if (typeof node.properties?.dataOriginalMjx !== "string" && !mjx3Data2)
               return;
             const tex = typeof node.properties?.dataOriginalMjx === "string" ? decodeURIComponent(node.properties?.dataOriginalMjx) : `${mjx3Data2[mjxNodeCounter].delim}${mjx3Data2[mjxNodeCounter].tex}${mjx3Data2[mjxNodeCounter].delim}`;
@@ -10936,6 +10937,9 @@ ${caption}${tableContent}
             node.children = [{ type: "text", value: tex }];
             node.properties.className = "__mjx3-turndown";
             mjxNodeCounter += 1;
+          } else if (reasons.mathjax2 && node.type === "element" && node.tagName === "script" && node.properties.type === "math/tex") {
+            node.tagName = "span";
+            node.properties.className = "__mjx2-turndown";
           }
         }
       }).process(dom?.documentElement?.innerHTML ?? dom.innerHTML);
@@ -10965,6 +10969,13 @@ ${caption}${tableContent}
     escapeContent: () => false,
     replacement: function(content, node, options) {
       return content.replace(/(?<=\$\$)(\S)/g, "\n$1").replace(/(\S)(?=\$\$)/g, "$1\n").replace(/\\n/g, "\n");
+    }
+  });
+  turndownService.addRule("mathjax2_inline", {
+    filter: (node) => node.classList.contains("__mjx2-turndown"),
+    escapeContent: () => false,
+    replacement: function(content, node, options) {
+      return `$${content}$`;
     }
   });
   function processMarkdown(htmlString) {

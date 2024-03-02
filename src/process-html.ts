@@ -12,7 +12,8 @@ export async function processHTML(dom: Document, mjx3Data: mathJaxInfo) {
 	const parser = new DOMParser()
 	
 	const reasons = {
-		mathjax3: dom.querySelector("mjx-container") !== null && (mjx3Data || (dom.querySelector("mjx-container") as HTMLElement)?.dataset?.originalMjx)
+		mathjax3: dom.querySelector("mjx-container") !== null && (mjx3Data || (dom.querySelector("mjx-container") as HTMLElement)?.dataset?.originalMjx),
+		mathjax2: dom.querySelector(`script[type="math/tex"]`) !== null
 	}
 
 	if (Object.values(reasons).some(Boolean)) {
@@ -28,7 +29,7 @@ export async function processHTML(dom: Document, mjx3Data: mathJaxInfo) {
 			.use(rehypeStringify)
 			.use(rehypeRewrite, {
 				rewrite: (node, index, parent) => {
-					if(node.type === 'element' && node.tagName === 'mjx-container') {
+					if(reasons.mathjax3 && node.type === 'element' && node.tagName === 'mjx-container') {
 						if (typeof node.properties?.dataOriginalMjx !== 'string' && !mjx3Data) return;
 
 						const tex = (typeof node.properties?.dataOriginalMjx === 'string') 
@@ -40,6 +41,10 @@ export async function processHTML(dom: Document, mjx3Data: mathJaxInfo) {
 						node.children = [ {type: 'text', value: tex } ]
 						node.properties.className = '__mjx3-turndown'
 						mjxNodeCounter += 1
+						// TODO handle $$
+					} else if (reasons.mathjax2 && node.type === 'element' && node.tagName === 'script' && node.properties.type === "math/tex") {
+						node.tagName = 'span'
+						node.properties.className = '__mjx2-turndown'
 					}
 				}
 			})

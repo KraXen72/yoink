@@ -10,6 +10,8 @@ const turndownService = new Turndown({
 })
 turndownService.use(gfm)
 
+// joplin turndown does have some mathjax rules but i'm not hitting them due to me having to handle mathjax stuff before it get's to readability
+// i'm still keeping the fork due to it being more maintained and having more features
 turndownService.addRule("mathjax3", {
 	filter: (node: HTMLElement) => node.classList.contains("__mjx3-turndown") || node.dataset?.originalMjx,
 	escapeContent: () => false,
@@ -21,6 +23,14 @@ turndownService.addRule("mathjax3", {
 			.replace(/\\n/g, "\n"); // revive newlines :euphoria:
   }
 })
+turndownService.addRule("mathjax2_inline", {
+	filter: (node: HTMLElement) => node.classList.contains("__mjx2-turndown"),
+	escapeContent: () => false,
+	replacement: function (content, node, options) {
+		return `$${content}$`
+	}
+})
+
 
 
 export function processMarkdown(htmlString: string) {
