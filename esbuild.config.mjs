@@ -14,7 +14,8 @@ const ctx = await esbuild.context({
 	entryPoints: {
     popup: 'src/popup.ts',
     background: 'src/background.ts',
-    content: 'src/content.ts'
+    content: 'src/content.ts',
+		page: 'src/page.ts'
   },
   bundle: true,
   outdir: 'extension',

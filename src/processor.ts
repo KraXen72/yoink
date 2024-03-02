@@ -1,5 +1,6 @@
 import { processHTML } from './process-html';
 import { processMarkdown } from './process-markdown';
+import type { ImObj, mathJaxInfo } from './page';
 
 function convertDate(date) {
 	var yyyy = date.getFullYear().toString();
@@ -47,7 +48,7 @@ function getFileName(fileName) {
 	return fileName;
 }
 
-export async function process(dom: Document) {
+export async function process(dom: Document, mjxInfo: mathJaxInfo ) {
 	// obsidian stuff
 	const vault = "";
 	const folder = "Clippings/";
@@ -90,7 +91,7 @@ export async function process(dom: Document) {
 	if (Array.isArray(meta.tags)) meta.tags.push("clippings")
 
 
-	const content = await processHTML(dom)
+	const content = await processHTML(dom, mjxInfo)
 	// console.log(content)
 	// const fileName = getFileName(title);
 
@@ -107,7 +108,7 @@ export async function process(dom: Document) {
 			.join("\n")
 		+ '\n---\n\n' + markdownBody
 
-	// console.log(fileContent)
+	console.log(fileContent)
 	// document.location.href = "obsidian://new?"
 	// 	+ "file=" + encodeURIComponent(folder + fileName)
 	// 	+ "&content=" + encodeURIComponent(fileContent)

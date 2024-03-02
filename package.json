@@ -18,7 +18,10 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@joplin/turndown": "^4.0.73",
+    "@joplin/turndown-plugin-gfm": "^1.0.55",
     "@mozilla/readability": "^0.5.0",
+    "path-esm": "^1.0.0",
     "rehype": "^13.0.1",
     "rehype-dom-parse": "^5.0.0",
     "rehype-rewrite": "^4.0.2",
