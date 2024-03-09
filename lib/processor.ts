@@ -1,6 +1,10 @@
 import { processHTML } from './process-html';
 import { processMarkdown } from './process-markdown';
-import type { ImObj, mathJaxInfo } from './page';
+import type { ImObj, mathJaxInfo } from './mathjax3';
+
+// fu
+// function processHTML(dom: Document) { return dom.documentElement.innerHTML }
+// function processMarkdown(a) { return a };
 
 function convertDate(date) {
 	var yyyy = date.getFullYear().toString();

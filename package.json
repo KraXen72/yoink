@@ -1,33 +1,26 @@
 {
-  "name": "template_chrome_extension",
-  "version": "0.0.1",
-  "description": "Template chrome extension build with esbuild and typescript",
-  "main": "index.js",
-  "repository": "https://github.com/emelcd/template_chrome_extension",
-  "author": "emelcd raticorps@gmail.com",
-  "license": "MIT",
+  "name": "yoink2",
+  "description": "Chrome markdown clipper (wxt)",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev2": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --watch --minify",
-    "build2": "esbuild popup=src/popup.ts background=src/background.ts content=src/content.ts  --bundle   --outdir=extension --minify",
-    "dev": "node esbuild.config.mjs",
-    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.262",
-    "esbuild": "^0.20.1",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {
     "@joplin/turndown": "^4.0.73",
     "@joplin/turndown-plugin-gfm": "^1.0.55",
     "@mozilla/readability": "^0.5.0",
+    "@types/turndown": "^5.0.4",
     "path-esm": "^1.0.0",
-    "rehype": "^13.0.1",
-    "rehype-dom-parse": "^5.0.0",
-    "rehype-rewrite": "^4.0.2",
-    "rehype-stringify": "^10.0.0",
-    "turndown": "^7.1.2",
-    "turndown-plugin-gfm": "^1.0.2",
-    "unified": "^11.0.4"
+    "typescript": "^5.3.3",
+    "wxt": "^0.17.0"
   }
 }
