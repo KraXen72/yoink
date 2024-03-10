@@ -1,12 +1,14 @@
 import { Readability } from '@mozilla/readability';
 import type { math3Obj } from '@/lib/mathjax3';
+import { mathjax2isBlock, wrapMathjaxContent } from './mathjax';
 
 export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 	let domm = dom;
 
 	const reasons = {
 		mathjax3: dom.querySelector("mjx-container") !== null && (mathObjs || (dom.querySelector("mjx-container") as HTMLElement)?.dataset?.originalMjx),
-		mathjax2: dom.querySelector(`script[type="math/tex"]`) !== null
+		mathjax2: dom.querySelector(`script[type^="math/tex"], script[type^="math/asciimath"]`) !== null,
+		katex: dom.querySelector('link[href="katex.min.css"], .katex-mathml, .katex-html, .katex') !== null 
 	};
 
 	if (Object.values(reasons).some(Boolean)) {
@@ -26,38 +28,53 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 					: el2.dataset.mjx3delim
 
 				const isBlock = delim === "$$"
-				let preContent = `${delim}`					
-				if (isBlock) preContent += "\n"
-				preContent += unwrappedTex
-				if (isBlock) preContent += "\n"
-				preContent += delim
-				preContent = preContent.replace(/(?<!\$)\n{2,}|^\s+/, '')
-
 				const wrap = Object.assign(document.createElement(isBlock ? 'pre' : 'span'), {
-					textContent: preContent
+					textContent: wrapMathjaxContent(unwrappedTex, delim, isBlock)
 				} satisfies Partial<HTMLElement>)
-			
+				wrap.classList.add("__mjx3-turndown")
+
 				el2.parentElement.replaceChild(wrap, el2)
 				mjx3NodeCounter += 1;
 			})
 		}
 
-		// TODO fully implement
-		if (reasons.mathjax2) domm.querySelectorAll(`script[type^="math/tex"]`).forEach(el => {
-			const wrap = Object.assign(document.createElement("pre"), {
+		if (reasons.mathjax2) domm.querySelectorAll(`script[type^="math/tex"], script[type^="math/asciimath"]`).forEach(el => {
+
+			const isBlock = mathjax2isBlock(el) === 'block'
+			const wrap = Object.assign(document.createElement(isBlock ? 'pre' : 'span'), {
 				textContent: el.innerHTML
 			} satisfies Partial<HTMLElement>)
-			wrap.classList.add("__mjx2-turndown")
 
+			wrap.classList.add(isBlock ? "__mjx2-turndown-block" : "__mjx2-turndown-inline")
 			el.parentElement.replaceChild(wrap, el)
 		})
+
+		if (reasons.katex) {
+			domm.querySelectorAll(".katex-mathml").forEach(el => {
+				const texEl = el.querySelector(`math > semantics > annotation[encoding*="tex"]`)
+				if (el.querySelector('math') === null || texEl === null) return;
+
+				const isBlock = (el.querySelector(`math`).hasAttribute('display') 
+					&& el.querySelector(`math`).getAttribute("display") === "block"
+					) || el.querySelector(`math > semantics > mrow > mstyle[displaystyle="true"]`) !== null
+
+				const wrap = Object.assign(document.createElement(isBlock ? 'pre' : 'span'), {
+					textContent: texEl.textContent
+				} satisfies Partial<HTMLElement>)
+
+				console.log(isBlock, texEl.textContent)
+
+				wrap.classList.add(isBlock ? "__katex-turndown-block" : "__katex-turndown-inline")
+				el.parentElement.replaceChild(wrap, el)
+			})
+			// TODO non-mathml extraction?
+		}
 	}
 
 	const { title, byline, content } = new Readability(domm, {
-		keepClasses: true,
+		keepClasses: true
 	}).parse();
 
-	console.log('read', content)
-
+	// console.log('read', content)
 	return content;
 }

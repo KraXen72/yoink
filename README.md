@@ -11,11 +11,12 @@ work in progress.
   - [ ] image extraction
   - [ ] remote image downloading
   - [x] codeblocks
-  - [ ] mathjax v2
-  - [ ] katex
+  - [x] mathjax v2
+  - [x] katex
 - extra features
-  - [x] mathjax v3 (WIP)
-  - [x] assume codeblock language for syntax highlighting (WIP)
+  - [x] mathjax v3
+  - [x] mathjax v2 type `math/asciimath`
+  - [x] assume codeblock language for syntax highlighting
   - [ ] extract content from iframes as well
   - [ ] set image size for obsidian-style images
 - likely won't be implemented

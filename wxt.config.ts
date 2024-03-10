@@ -8,6 +8,8 @@ export default defineConfig({
 		startUrls: [
 			"https://jrsinclair.com/articles/2023/how-to-consume-a-paginated-api-using-javascript-async-generators/",
 			"https://mathjax.github.io/MathJax-demos-web/tex-chtml.html",
+			"file:///D:/coding/%23sandbox/test%20pages%20for%20yoink/delft%20edx2.html",
+			"https://sixthform.info/katex/examples/centraliser.html"
 		],
 	},
 	manifest: {
