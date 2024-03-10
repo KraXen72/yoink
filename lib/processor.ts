@@ -2,10 +2,6 @@ import { processHTML } from './process-html';
 import { processMarkdown } from './process-markdown';
 import type { mathJax3Payload } from './mathjax3';
 
-// fu
-// function processHTML(dom: Document) { return dom.documentElement.innerHTML }
-// function processMarkdown(a) { return a };
-
 function convertDate(date) {
 	var yyyy = date.getFullYear().toString();
 	var mm = (date.getMonth() + 1).toString();
@@ -13,11 +9,6 @@ function convertDate(date) {
 	var mmChars = mm.split('');
 	var ddChars = dd.split('');
 	return yyyy + '-' + (mmChars[1] ? mm : "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
-}
-
-function getMetaContent(attr, value) {
-	var element = document.querySelector(`meta[${attr}='${value}']`);
-	return element ? element.getAttribute("content").trim() : "";
 }
 
 function getSelectionHtml() {
@@ -31,6 +22,7 @@ function getSelectionHtml() {
 			}
 			html = container.innerHTML;
 		}
+	// FIXME
 	} else if (typeof document.selection != "undefined") {
 		if (document.selection.type == "Text") {
 			html = document.selection.createRange().htmlText;
@@ -41,7 +33,7 @@ function getSelectionHtml() {
 
 function getFileName(fileName) {
 	var userAgent = window.navigator.userAgent,
-		platform = window.navigator.platform,
+		platform = window.navigator.platform, // FIXME
 		windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
 
 	if (windowsPlatforms.indexOf(platform) !== -1) {
@@ -74,9 +66,6 @@ export async function process(dom: Document, mjx3Info: mathJax3Payload ) {
 		"author": { qs: 'meta[property="author"]', attr: "content" },
 		"tags": { qs: `meta[name="parsely-tags"]`, attr: "content", deli: "," }
 	}
-
-	// Fetch byline, meta author, property author, or site name
-	// var author = byline || getMetaContent("name", "author") || getMetaContent("property", "author") || getMetaContent("property", "og:site_name");
 
 	for (const [key, info] of Object.entries(metaSelectors)) {
 		const el = document.querySelector(info.qs)

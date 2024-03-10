@@ -19,7 +19,6 @@
     "@joplin/turndown-plugin-gfm": "^1.0.55",
     "@mozilla/readability": "^0.5.0",
     "@types/turndown": "^5.0.4",
-    "path-esm": "^1.0.0",
     "typescript": "^5.3.3",
     "wxt": "^0.17.0"
   },

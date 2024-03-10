@@ -22,9 +22,6 @@ devDependencies:
   '@types/turndown':
     specifier: ^5.0.4
     version: 5.0.4
-  path-esm:
-    specifier: ^1.0.0
-    version: 1.0.0
   typescript:
     specifier: ^5.3.3
     version: 5.4.2
@@ -2574,10 +2571,6 @@ packages:
     resolution: {integrity: sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==}
     dependencies:
       entities: 4.5.0
-    dev: true
-
-  /path-esm@1.0.0:
-    resolution: {integrity: sha512-n8VmE2yPFnAbSdC96rAi+njaTfdq0x3r/DfRAkvi6TViliU0wLXywoI4tgKdBhGdY6nk5v9WGIeoWn1j0Y1Kxg==}
     dev: true
 
   /path-is-absolute@1.0.1:

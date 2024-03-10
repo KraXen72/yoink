@@ -1,15 +1,24 @@
 # yoink - web clipper for obsidian
-based on [kepano's obsidian web clipper bookmarklet](https://gist.github.com/kepano/90c05f162c37cf730abb8ff027987ca3)
+originally based on [kepano's obsidian web clipper bookmarklet](https://gist.github.com/kepano/90c05f162c37cf730abb8ff027987ca3)  
 
-## planned features
-- [ ] assume codeblock language
-- [ ] mathjax v2 and v3 support
+uses @joplin/turndown, readability and wxt, among others.
 
+work in progress.
 
-## current status
-indefinite hiatus.
-mathjax v3 destructively modifies the dom when rendering, and the only way to get the original tex commands is to run some function on the MathJax global object in the original page scope, which would (likely?) require me to inject a script tag into every page.
-
-## credits
-- https://github.com/xpl/crx-hotreload
-- 
+## aim
+- support most of markdownload's extraction features
+  - [x] metadata extraction
+  - [ ] image extraction
+  - [ ] remote image downloading
+  - [x] codeblocks
+  - [ ] mathjax v2
+  - [ ] katex
+- extra features
+  - [x] mathjax v3 (WIP)
+  - [x] assume codeblock language for syntax highlighting (WIP)
+  - [ ] extract content from iframes as well
+  - [ ] set image size for obsidian-style images
+- likely won't be implemented
+  - settings page with a bunch of niche, obsidian-specific features
+    - some obsidian-specific settings will be implemented
+  - inline editor, like codemirror - we'll see later

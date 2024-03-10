@@ -6,7 +6,8 @@ export default defineConfig({
 		chromiumArgs: ["--devtools"],
 		openDevtools: true,
 		startUrls: [
-			"https://mathjax.github.io/MathJax-demos-web/tex-chtml.html"
+			"https://jrsinclair.com/articles/2023/how-to-consume-a-paginated-api-using-javascript-async-generators/",
+			"https://mathjax.github.io/MathJax-demos-web/tex-chtml.html",
 		],
 	},
 	manifest: {
