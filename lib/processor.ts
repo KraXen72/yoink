@@ -82,6 +82,8 @@ export async function process(dom: Document, mjx3Info: mathJax3Payload ) {
 	}
 	meta.tags ??= []
 	if (Array.isArray(meta.tags)) meta.tags.push("clippings")
+	if (meta.subtitle === meta.description) delete meta.subtitle
+	if (meta.topics.toString().trim() === "") delete meta.topics
 
 	console.log('processor', mjx3Info)
 	const mjx3Data = mjx3Info && mjx3Info.status === 200 ? mjx3Info.data : []
