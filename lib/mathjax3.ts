@@ -6,6 +6,7 @@ export type mathJax3Payload =
 	{ status: 200, type: "mathjax3", data: math3Obj[] } |
 	{ status: 404, type: "mathjax3", data: 'string' } | false
 
+/** add data attributes to mathjax3 elements */
 export function patchMathjaxNode(node: HTMLElement, mObj: math3Obj) {
 	if (node.dataset.originalMjx) return;
 	node.dataset.mjx3deilm = mObj.delim
@@ -22,6 +23,9 @@ export function processMathObj(m: any) {
 	return mObj
 }
 
+/**
+ * collect the mathjax tex commands and patch the mjx-container elements
+ */
 export function mjx3CollectPatch(mathObj, collectedMathObj) {
 	if (!mathObj && !collectedMathObj) return null;
 

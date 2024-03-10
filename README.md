@@ -23,3 +23,4 @@ work in progress.
   - settings page with a bunch of niche, obsidian-specific features
     - some obsidian-specific settings will be implemented
   - inline editor, like codemirror - we'll see later
+

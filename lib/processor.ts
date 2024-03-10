@@ -48,7 +48,6 @@ export async function process(dom: Document, mjx3Info: mathJax3Payload ) {
 	// obsidian stuff
 	const vault = "";
 	const folder = "Clippings/";
-	let tags = ["clippings"];
 
 	const meta: Record<string, string | string[]> = {
 		title: document.querySelector(`meta[property="og:title"]`)?.getAttribute("content") || document.title,
@@ -57,7 +56,6 @@ export async function process(dom: Document, mjx3Info: mathJax3Payload ) {
 		topics: ""
 	}
 
-	// add array support
 	const metaSelectors = {
 		"description": { qs: `meta[name="description"]`, attr: "content" },
 		"subtitle": { qs: `meta[property="og:description"]`, attr: "content" },

@@ -1,3 +1,5 @@
+// general mathjax utils
+
 /**
  * modifed from:
  * @see https://github.com/laurent22/joplin/tree/dev/packages/turndown
