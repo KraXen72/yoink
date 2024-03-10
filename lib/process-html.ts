@@ -17,16 +17,24 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 				if (typeof (el as HTMLElement).dataset.originalMjx !== 'string' && !mathObjs) return;
 				const el2 = el as HTMLElement
 
-				const tex = (typeof el2.dataset.originalMjx === 'string')
+				const unwrappedTex = (typeof el2.dataset.originalMjx === 'string')
 					? decodeURIComponent(el2.dataset.originalMjx)
-					: `${mathObjs[mjx3NodeCounter].delim}${mathObjs[mjx3NodeCounter].tex}${mathObjs[mjx3NodeCounter].delim}`;
-				const isBlock = mathObjs[mjx3NodeCounter] 
-					? mathObjs[mjx3NodeCounter].delim === "$$" 
-					: tex.startsWith("$$")
-				console.log("isBlock", isBlock, tex)
+					: mathObjs[mjx3NodeCounter].tex;
+				
+				const delim = mathObjs[mjx3NodeCounter] 
+					? mathObjs[mjx3NodeCounter].delim 
+					: el2.dataset.mjx3delim
 
-				const wrap = Object.assign(document.createElement(isBlock ? 'div' : 'span'), {
-					textContent: tex
+				const isBlock = delim === "$$"
+				let preContent = `${delim}`					
+				if (isBlock) preContent += "\n"
+				preContent += unwrappedTex
+				if (isBlock) preContent += "\n"
+				preContent += delim
+				preContent = preContent.replace(/(?<!\$)\n{2,}|^\s+/, '')
+
+				const wrap = Object.assign(document.createElement(isBlock ? 'pre' : 'span'), {
+					textContent: preContent
 				} satisfies Partial<HTMLElement>)
 			
 				el2.parentElement.replaceChild(wrap, el2)

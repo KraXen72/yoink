@@ -4,15 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  '@joplin/turndown@4.0.73':
-    hash: 4shl54y4gcnf4722z23lp34o3e
-    path: patches/@joplin__turndown@4.0.73.patch
-
 devDependencies:
   '@joplin/turndown':
     specifier: ^4.0.73
-    version: 4.0.73(patch_hash=4shl54y4gcnf4722z23lp34o3e)
+    version: 4.0.73
   '@joplin/turndown-plugin-gfm':
     specifier: ^1.0.55
     version: 1.0.55
@@ -317,7 +312,7 @@ packages:
     resolution: {integrity: sha512-ij5DquSAWnu1fVM02N2m32uMxslJZcdMuTsLJfTHYEVs96R8MKFaHtWjbQycpx9PRYdlL5jW4SaW9A92OCccxA==}
     dev: true
 
-  /@joplin/turndown@4.0.73(patch_hash=4shl54y4gcnf4722z23lp34o3e):
+  /@joplin/turndown@4.0.73:
     resolution: {integrity: sha512-5u5CUih9otHMkWpvH1VtHLyF0VMYnl2FVxv+/QvAX7PfwvGdmfMQISzC/wwb3MueMb/yhemv5c+6oiN4RCNlWw==}
     dependencies:
       '@adobe/css-tools': 4.3.2
@@ -329,7 +324,6 @@ packages:
       - supports-color
       - utf-8-validate
     dev: true
-    patched: true
 
   /@jridgewell/sourcemap-codec@1.4.15:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}

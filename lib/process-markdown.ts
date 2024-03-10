@@ -18,8 +18,8 @@ turndownService.addRule("mathjax3", {
 	replacement: function (content, node, options) {
 		console.log(content)
     return content
-			.replace(/(?<=\$\$)(\S)/g, "\n$1") // start: ensure $$ is on a new line
-			.replace(/(\S)(?=\$\$)/g, "$1\n") // end: ensure $$ is on a new line
+			// .replace(/(?<=\$\$)(\S)/g, "\n$1") // start: ensure $$ is on a new line
+			// .replace(/(\S)(?=\$\$)/g, "$1\n") // end: ensure $$ is on a new line
 			// .replace(/\\n/g, "\n"); // revive newlines :euphoria:
   }
 })

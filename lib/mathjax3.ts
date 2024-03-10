@@ -8,7 +8,8 @@ export type mathJax3Payload =
 
 export function patchMathjaxNode(node: HTMLElement, mObj: math3Obj) {
 	if (node.dataset.originalMjx) return;
-	node.dataset.originalMjx = encodeURIComponent(`${mObj.delim}${mObj.tex}${mObj.delim}`)
+	node.dataset.mjx3deilm = mObj.delim
+	node.dataset.originalMjx = encodeURIComponent(mObj.tex)
 }
 
 export function processMathObj(m: any) {
@@ -21,7 +22,7 @@ export function processMathObj(m: any) {
 	return mObj
 }
 
-export function mjx3CollectPath(mathObj, collectedMathObj) {
+export function mjx3CollectPatch(mathObj, collectedMathObj) {
 	if (!mathObj && !collectedMathObj) return null;
 
 	const acc: math3Obj[] = []

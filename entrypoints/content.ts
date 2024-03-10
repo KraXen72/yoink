@@ -1,4 +1,4 @@
-import type { mathJax3Payload, mathJaxInfo } from "@/lib/mathjax3"
+import type { mathJax3Payload } from "@/lib/mathjax3"
 import { process } from "@/lib/processor"
 
 export default defineContentScript({
