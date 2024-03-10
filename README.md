@@ -1,7 +1,7 @@
 # yoink - web clipper for obsidian
 originally based on [kepano's obsidian web clipper bookmarklet](https://gist.github.com/kepano/90c05f162c37cf730abb8ff027987ca3)  
 
-uses @joplin/turndown, readability and wxt, among others.
+uses [@joplin/turndown](https://github.com/laurent22/joplin/tree/dev/packages/turndown), [readability](https://github.com/mozilla/readability) and [wxt](https://github.com/wxt-dev/wxt), among others.
 
 work in progress.
 
