@@ -8,14 +8,13 @@ const turndownService = new Turndown({
 	codeBlockStyle: 'fenced',
 	emDelimiter: '*'
 })
-console.log(turndownService.rules)
 turndownService.use(gfm)
 
 // joplin turndown does have some mathjax rules but i'm not hitting them due to me having to handle mathjax stuff before it get's to readability
 // i'm still keeping the fork due to it being more maintained and having more features
 turndownService.addRule("mathjax3", {
 	filter: (node: HTMLElement) => node.classList.contains("__mjx3-turndown") || !!(node.dataset?.originalMjx),
-	escapeContent: () => false,
+	escapeContent: (node, _options) => false,
 	replacement: function (content, node, options) {
 		console.log(content)
     return content

@@ -1,6 +1,6 @@
 import { processHTML } from './process-html';
 import { processMarkdown } from './process-markdown';
-import type { ImObj, mathJaxInfo } from './mathjax3';
+import type { mathJax3Payload } from './mathjax3';
 
 // fu
 // function processHTML(dom: Document) { return dom.documentElement.innerHTML }
@@ -52,7 +52,7 @@ function getFileName(fileName) {
 	return fileName;
 }
 
-export async function process(dom: Document, mjxInfo: mathJaxInfo ) {
+export async function process(dom: Document, mjx3Info: mathJax3Payload ) {
 	// obsidian stuff
 	const vault = "";
 	const folder = "Clippings/";
@@ -94,8 +94,9 @@ export async function process(dom: Document, mjxInfo: mathJaxInfo ) {
 	meta.tags ??= []
 	if (Array.isArray(meta.tags)) meta.tags.push("clippings")
 
-
-	const content = await processHTML(dom, mjxInfo)
+	console.log('processor', mjx3Info)
+	const mjx3Data = mjx3Info && mjx3Info.status === 200 ? mjx3Info.data : []
+	const content = await processHTML(dom, mjx3Data)
 	// console.log(content)
 	// const fileName = getFileName(title);
 

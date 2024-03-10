@@ -22,5 +22,10 @@
     "path-esm": "^1.0.0",
     "typescript": "^5.3.3",
     "wxt": "^0.17.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@joplin/turndown@4.0.73": "patches/@joplin__turndown@4.0.73.patch"
+    }
   }
 }

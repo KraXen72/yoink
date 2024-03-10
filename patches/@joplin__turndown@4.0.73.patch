@@ -1,0 +1,37 @@
+diff --git a/lib/turndown.cjs.js b/lib/turndown.cjs.js
+index 67c25e792eb388027fa270f11be57022c7b6bc82..b1d60b3ac852acc7d1465b268814ce0b6ca6e854 100644
+--- a/lib/turndown.cjs.js
++++ b/lib/turndown.cjs.js
+@@ -1011,7 +1011,7 @@ function collapseWhitespace (options) {
+   var prevTextIsOnlySpaces = false;
+   while (node !== element) {
+     if (node.nodeType === 3 || node.nodeType === 4) { // Node.TEXT_NODE or Node.CDATA_SECTION_NODE
+-      var text = node.data.replace(/[ \r\n\t]+/g, ' ');
++      var text = node.data.replace(/[ \r\t]+/g, ' ');
+ 
+       if ((!prevText || / $/.test(prevText.data)) &&
+           !keepLeadingWs && text[0] === ' ') {
+@@ -1150,12 +1150,14 @@ function RootNode (input, options) {
+   } else {
+     root = input.cloneNode(true);
+   }
++	console.log('beforeCollapse', root.innerHTML)
+   collapseWhitespace({
+     element: root,
+     isBlock: isBlock,
+     isVoid: isVoid,
+     isPre: options.preformattedCode ? isPreOrCode : null
+   });
++	console.log('afterCollapse', root.innerHTML)
+ 
+   return root
+ }
+@@ -1443,6 +1445,8 @@ function process (parentNode, escapeContent = 'auto') {
+       replacement = replacementForNode.call(this, node, previousNode);
+     }
+ 
++		console.log('debug', output, node.nodeValue)
++		
+     output = join(output, replacement);
+     previousNode = node;
+   }

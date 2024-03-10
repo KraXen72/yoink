@@ -12,7 +12,7 @@ export default defineUnlistedScript(() => {
 				globalThis.MathJax?.startup?.document?.math?.list,
 				globalThis.MathJax?.startup?.document?.getMathItemsWithin(document.documentElement)
 			)
-			window.postMessage({ type: "mathjax3", status: 200, data: { math: collected } })
+			window.postMessage({ type: "mathjax3", status: 200, data: collected })
 		}
 	} catch (e) { console.error(e) }
 })

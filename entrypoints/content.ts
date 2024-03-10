@@ -1,4 +1,4 @@
-import type { mathJaxInfo } from "@/lib/mathjax3"
+import type { mathJax3Payload, mathJaxInfo } from "@/lib/mathjax3"
 import { process } from "@/lib/processor"
 
 export default defineContentScript({
@@ -22,7 +22,7 @@ export default defineContentScript({
 					const mathjaxResult = await new Promise((res, rej) => {
 						window.addEventListener("message", (e) => res(e.data))
 						scriptTimeout = setTimeout(() => res(false), 100)
-					}) as mathJaxInfo
+					}) satisfies mathJax3Payload
 					if (pageScriptElem !== null) pageScriptElem.remove();
 					clearTimeout(scriptTimeout)
 					console.log(mathjaxResult)
