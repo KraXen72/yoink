@@ -20,7 +20,8 @@ interface HTMLProcessRule {
 
 /**
  * A HTMLRewriter - register rewrite rules, that modify some elements based on their queryselector
- * provides access to a simple numeric storage and the whole dom
+ * provides access to a simple numeric storage and the whole dom  
+ * **note: this is not cloudflare's HTMLRewriter**
  */
 class HTMLRewriter {
 
@@ -127,7 +128,7 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 	})
 
 	rewriter.processHTML()
-	console.log(rewriter.dom.documentElement.innerHTML)
+	// console.log(rewriter.dom.documentElement.innerHTML)
 
 	const { title, byline, content } = new Readability(rewriter.dom, {
 		keepClasses: true,

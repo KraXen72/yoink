@@ -6,7 +6,10 @@ import { mathjax3unneededPayload } from "@/lib/mathjax3";
 
 export default defineContentScript({
 	matches: ['<all_urls>'],
-	main() { browser.runtime.onMessage.addListener(onMessageCallback) }
+	main() { 
+		console.log(`Hello from yoink's content script`)
+		browser.runtime.onMessage.addListener(onMessageCallback) 
+	}
 });
 
 async function onMessageCallback(request, sender: Runtime.MessageSender, sendResponse: () => void) {

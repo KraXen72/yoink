@@ -10,7 +10,7 @@ export default defineConfig({
 			"https://mathjax.github.io/MathJax-demos-web/tex-chtml.html",
 			"file:///D:/coding/%23sandbox/test%20pages%20for%20yoink/delft%20edx2.html",
 			"https://sixthform.info/katex/examples/centraliser.html",
-			"https://www.theverge.com/2022/10/28/23428132/elon-musk-twitter-acquisition-problems-speech-moderation",
+			"file:///D:/coding/%23sandbox/test%20pages%20for%20yoink/delft%20edx2-iframe.html",
 			"https://zealot.hu/absolem/",
 			"file:///D:/coding/%23sandbox/test%20pages%20for%20yoink/verge-stripped.html"
 		],

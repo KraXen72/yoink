@@ -30,14 +30,14 @@ turndownService.addRule("mathjax2-katex", {
 	escapeContent: () => false,
 	replacement: function (content: string, node: HTMLElement) {
 		const delim = node.classList.toString().includes("-block") ? "$$" : "$"
-		let out = wrapMathjaxContent(content, delim, node.classList.contains("__mjx2-turndown-block"))
-		if (node.classList.contains("__katex-turndown-block")) out += "\n\n"
+		let out = wrapMathjaxContent(content, delim)
+		// console.table({ formatted: out, content, delim })
+		if (node.classList.contains("__katex-turndown-block")) out = "\n" + out + '\n'
 		return out
 	}
 })
 turndownService.addRule("mathjax2-yeetRendered", {
 	filter: (node: HTMLElement) => {
-		// console.log(node, node.parentElement, node.nextElementSibling)
 		return node.classList.contains("MathJax_CHTML") && node.id 
 			&& node.id.startsWith("MathJax-") && node.id.endsWith("Frame")
 	},
