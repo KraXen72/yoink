@@ -4,7 +4,7 @@
  * modifed from:
  * @see https://github.com/laurent22/joplin/tree/dev/packages/turndown
  */
-export function mathjax2isBlock(node: Element) {
+export function mathjax2displayType(node: Element) {
 	if (node.nodeName !== 'SCRIPT') return null;
 
 	const a = node.getAttribute('type');

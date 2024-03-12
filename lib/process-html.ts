@@ -1,6 +1,7 @@
 import { Readability } from '@mozilla/readability';
+
+import { mathjax2displayType, wrapMathjaxContent } from './mathjax';
 import type { math3Obj } from '@/lib/mathjax3';
-import { mathjax2isBlock, wrapMathjaxContent } from './mathjax';
 import { getReasons } from '@/utils/reasons';
 import { elem } from '@/utils/element';
 
@@ -66,7 +67,7 @@ const rewriter = new HTMLRewriter()
 rewriter.addRule('mathjax2', {
 	selector: `script[type^="math/tex"], script[type^="math/asciimath"]`,
 	rewrite: (el, dom, stor) => {
-		const isBlock = mathjax2isBlock(el) === 'block'
+		const isBlock = mathjax2displayType(el) === 'block'
 		const wrap = elem(isBlock ? 'pre' : 'span', {
 			textContent: el.innerHTML,
 			class: isBlock ? "__mjx2-turndown-block" : "__mjx2-turndown-inline"
@@ -125,21 +126,6 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 		}
 	})
 
-	// fix for https://www.theverge.com/2022/10/28/23428132/elon-musk-twitter-acquisition-problems-speech-moderation
-	// likely happens elsewhere too
-	// if (reasons.verge) { 
-	// 	domm.querySelectorAll(".duet--article--article-body-component").forEach(el => {
-	// 		const el2 = el as HTMLElement
-	// 		if (el2.firstElementChild == null) return;
-	// 		if (getCharCount(el2.firstElementChild as HTMLElement, ',') < 10) {
-	// 			const wrap = document.createElement("figure")
-	// 			wrap.appendChild(el2.firstElementChild)
-	// 			el2.textContent = ""
-	// 			el2.appendChild(wrap)
-	// 		}
-	// 	})
-	// }
-
 	rewriter.processHTML()
 	console.log(rewriter.dom.documentElement.innerHTML)
 
@@ -151,3 +137,23 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 
 	return content;
 }
+
+// site-specific rules
+// feel free to add site specific rules below
+
+// repro: https://www.theverge.com/2022/10/28/23428132/elon-musk-twitter-acquisition-problems-speech-moderation
+rewriter.addRule('www.theverge.com', {
+	// second url is example for local testing
+	check: document.location.origin === 'https://www.theverge.com' || 
+		(document.location.protocol === 'file:' && document.location.href.endsWith("verge-stripped.html")
+	),
+	selector: '.duet--article--article-body-component',
+	rewrite: (el, dom, storage) => {
+		if (el.firstElementChild == null) return;
+		if (getCharCount(el.firstElementChild as HTMLElement, ',') < 10) {
+			const newElem = elem('figure')
+			newElem.append(el.firstElementChild)
+			return newElem
+		}
+	},
+})
