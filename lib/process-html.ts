@@ -65,6 +65,17 @@ class HTMLRewriter {
 
 const rewriter = new HTMLRewriter()
 
+// readability yeets headings if they have a *header* class. smh
+rewriter.addRule('preserveHeaders', {
+	selector: ':is(h1, h2, h3, h4, h5, h6)[class*="header"][id]',
+	rewrite: (el, dom, stor) => {
+		if (el.textContent.trim() === "") return;
+		const stripClasses = []
+		el.classList.forEach((val) => { if (val.includes("header")) stripClasses.push(val) })
+		el.classList.remove(...stripClasses)
+	}
+})
+
 rewriter.addRule('mathjax2', {
 	selector: `script[type^="math/tex"], script[type^="math/asciimath"]`,
 	rewrite: (el, dom, stor) => {
@@ -132,7 +143,7 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 
 	const { title, byline, content } = new Readability(rewriter.dom, {
 		keepClasses: true,
-		debug: false
+		debug: false,
 	}).parse();
 	// console.log('read', reasons, content)
 

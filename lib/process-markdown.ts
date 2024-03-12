@@ -14,10 +14,7 @@ turndownService.use(gfm)
 turndownService.addRule("mathjax3", {
 	filter: (node: HTMLElement) => node.classList.contains("__mjx3-turndown") || !!(node.dataset?.originalMjx),
 	escapeContent: (node, _options) => false,
-	replacement: function (content, node, options) {
-		// console.log(content)
-    return content
-  }
+	replacement: function (content, node, options) { return content }
 })
 
 turndownService.addRule("mathjax2-katex", {
