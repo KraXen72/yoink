@@ -24,3 +24,6 @@ work in progress.
     - some obsidian-specific settings will be implemented
   - inline editor, like codemirror - we'll see later
 
+## features / internals
+- custom lightweight HTMLRewriter - modify or replace dom nodes before converting them to markdown based on a querySelector
+  - this allows anyone to easily contribute a site-specific fix for their favorite site
