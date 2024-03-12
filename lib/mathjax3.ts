@@ -4,7 +4,13 @@ export interface math3Obj {
 }
 export type mathJax3Payload = 
 	{ status: 200, type: "mathjax3", data: math3Obj[] } |
-	{ status: 404, type: "mathjax3", data: 'string' } | false
+	{ status: 404, type: "mathjax3", data: string } | false
+
+export const mathjax3unneededPayload: mathJax3Payload = {
+	status: 404, 
+	type: "mathjax3", 
+	data: `mjx3: reasons.mathjax3 === false, didn't inject`
+}
 
 /** add data attributes to mathjax3 elements */
 export function patchMathjaxNode(node: HTMLElement, mObj: math3Obj) {
