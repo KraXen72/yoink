@@ -1,33 +1,44 @@
-import type { mathJax3Payload } from "@/lib/mathjax3"
 import { process } from "@/lib/processor"
-import { getReasons } from "@/utils/reasons";
-import { Runtime } from "wxt/browser";
+import { getReasons, currTab } from "@/utils";
 import { mathjax3unneededPayload } from "@/lib/mathjax3";
+import type { mathJax3Payload } from "@/lib/mathjax3"
+import type { protocol } from "@/lib/types";
+import type { Runtime } from "wxt/browser";
 
 export default defineContentScript({
 	matches: ['<all_urls>'],
 	main() { 
-		console.log(`Hello from yoink's content script`)
-		browser.runtime.onMessage.addListener(onMessageCallback) 
+		console.log(`Hello from yoink's content script`, window.self === window.top)
+		browser.runtime.onMessage.addListener(msgCallback) 
 	}
 });
 
-async function onMessageCallback(request, sender: Runtime.MessageSender, sendResponse: () => void) {
-	if (request.cmd && request.cmd === 'process') {
+async function msgCallback(request: protocol, sender: Runtime.MessageSender, sendResponse: () => void) {
+	if (request?.for === 'content' && request?.cmd === 'process') {
 		const reasons = getReasons(document)
+		console.log('processing', reasons)
+		const extraData = (reasons.mathjax3)
+			? (await injectPageScript())
+			: { mathjaxResult: mathjax3unneededPayload };
 
-		if (reasons.mathjax3) {
-			injectPageScriptAndProcess()
-		} else {
-			process(
-				new DOMParser().parseFromString(document.documentElement.innerHTML, 'text/html'),mathjax3unneededPayload
-			)
+		if (reasons.iframes) {
+			// const tabId = (await currTab())!.id
+			document.querySelectorAll("iframe").forEach(ifr => {
+				if (!ifr.name) ifr.name = window.btoa(new Date().getTime().toString())
+				ifr.contentWindow.postMessage({ cmd: 'iframe-get', for: ifr.name })
+			})
 		}
+		const todoDOM = new DOMParser().parseFromString(document.documentElement.innerHTML, 'text/html')
+		
+		process(
+			todoDOM,
+			extraData.mathjaxResult
+		)
 	}
 }
 
 /** gets mathjax3 stuff from page global & calls process() */
-async function injectPageScriptAndProcess() {
+async function injectPageScript() {
 	let pageScriptElem: HTMLScriptElement | null = null;
 	let scriptTimeout: ReturnType<typeof setTimeout>;
 
@@ -48,6 +59,11 @@ async function injectPageScriptAndProcess() {
 	clearTimeout(scriptTimeout)
 	console.log(mathjaxResult)
 
-	process(new DOMParser().parseFromString(document.documentElement.innerHTML, 'text/html'), mathjaxResult)
+	return { mathjaxResult }
+	// browser.runtime.sendMessage({
+	// 	cmd: 'process', for: 'background',
+	// 	html: document.documentElement.innerHTML,
+	// 	data: { mjx3: mathjaxResult }
+	// } satisfies protocol)
 }
 

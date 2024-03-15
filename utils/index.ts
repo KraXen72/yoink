@@ -1,3 +1,21 @@
+export async function currTab() {
+	const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+	for (const tab of tabs) {
+		if (!tab.id) continue;
+		return tab
+	}
+	// return void 0
+}
+
+export function getReasons(dom: Document) {
+	return {
+		iframes: dom.querySelector("iframe") !== null,
+		mathjax3: dom.querySelector("mjx-container") !== null,
+		mathjax2: dom.querySelector(`script[type^="math/tex"], script[type^="math/asciimath"]`) !== null,
+		katex: dom.querySelector('link[href="katex.min.css"], .katex-mathml, .katex-html, .katex') !== null,
+	};
+}
+
 /**
  * create a dom element given an object of properties
  * @param type element type, e.g. "div"

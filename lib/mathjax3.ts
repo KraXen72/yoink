@@ -11,6 +11,11 @@ export const mathjax3unneededPayload: mathJax3Payload = {
 	type: "mathjax3", 
 	data: `mjx3: reasons.mathjax3 === false, didn't inject`
 }
+export const mathjax3ErrPayload: mathJax3Payload = {
+	status: 404, 
+	type: "mathjax3", 
+	data: `mjx3: mathjax3Payload was not sent to background script`
+}
 
 /** add data attributes to mathjax3 elements */
 export function patchMathjaxNode(node: HTMLElement, mObj: math3Obj) {

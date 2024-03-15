@@ -2,8 +2,8 @@ import { Readability } from '@mozilla/readability';
 
 import { mathjax2displayType, wrapMathjaxContent } from './mathjax';
 import type { math3Obj } from '@/lib/mathjax3';
-import { getReasons } from '@/utils/reasons';
-import { elem } from '@/utils/element';
+import { getReasons } from '@/utils';
+import { elem } from '@/utils';
 
 function getCharCount(el: HTMLElement, s = ",") {
 	return el.innerText.split(s).length - 1;
