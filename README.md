@@ -38,7 +38,7 @@ Have [git](https://git-scm.com/downloads), [nodejs](https://nodejs.org/enhttps:/
 ## site-specific fixes
 If yoink does not work on your favorite site, report open an issue! However, some sites are broken, because of how readability.js or turndown handle them - if you confirm this is the case or are told so in the issue, please open a pull request with a site-specific fix. It's pretty simple!
 
-> ![NOTE]  
+> [!NOTE]  
 > If you do not have any typescript experience or are simply unwilling to open a pull request, your site-specific rule will be considered, but is not guaranteed to be implemented!
 > There are simply too may sites for one person to maintain the support for. I will primarily fix sites I use or sites that are easy enough to fix. For this reason, i created a simple api so you can fix your site!
 
