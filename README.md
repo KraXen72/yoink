@@ -49,12 +49,12 @@ If you confirm this is the case or are told so in the issue, please open a pull 
 3. see, if somebody already wrote a rule for your site. 
    - if yes, try modifying their rule or create a new rule below it
    - if not, create a new rule at the bottom of the page
-4. creating a HTMLRewriter rule:
+4. creating a HTMLRewriter rule: (example below)  
 ```ts
-rewriter.addRule('rule name, for example "google"', {
-	selector: `css selector to modify`, 
-	// element, dom (document), storage (not required)
-	rewrite: (el, dom, storage) => {
+rewriter.addRule('change_spans_to_divs', { // first argument is rule name
+	selector: `span`, // css selector to modify 
+	// element, dom (document)
+	rewrite: (el, dom) => {
 		// some logic 
 		// - you can modify the dom directly with document methods like appendChild, etc
 		// - you can return an element which will be used as a replacement for the 'el' element
