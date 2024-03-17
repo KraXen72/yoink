@@ -1,6 +1,6 @@
 import Turndown from '@joplin/turndown';
 import { gfm } from '@joplin/turndown-plugin-gfm';
-import { wrapMathjaxContent } from './mathjax';
+import { wrapMathjaxContent } from '@/lib/mathjax';
 
 const turndownService = new Turndown({
 	headingStyle: 'atx',

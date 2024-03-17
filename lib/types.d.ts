@@ -1,4 +1,4 @@
-import { mathJax3Payload } from "./mathjax3"
+import { mathJax3Payload } from "@/lib/mathjax3"
 
 interface protocol {
 	cmd: string,

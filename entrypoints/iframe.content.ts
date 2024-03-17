@@ -1,6 +1,5 @@
-import type { protocol } from "@/lib/types";
 import { ulid } from "ulidx";
-// import type { Runtime } from "wxt/browser";
+import type { protocol } from "@/lib/types";
 
 let myUlid = ''
 
@@ -10,7 +9,7 @@ export default defineContentScript({
 	runAt: 'document_start',
 	main() { 
 		if (window.self === window.top) return; // return if we're in the top window.
-		console.log(`Hello from yoink's iframe content script`, window.self.location.href) 
+		console.log(`Hello from yoink's iframe content script`, window.self.location.href)
 		browser.runtime.onMessage.addListener(msgCallback)
 	}
 })

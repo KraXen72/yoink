@@ -1,6 +1,6 @@
-import { processHTML } from './process-html';
-import { processMarkdown } from './process-markdown';
-import type { mathJax3Payload } from './mathjax3';
+import { processHTML } from '@/lib/process-html';
+import { processMarkdown } from '@/lib/process-markdown';
+import type { mathJax3Payload } from '@/lib/mathjax3';
 
 function convertDate(date) {
 	var yyyy = date.getFullYear().toString();

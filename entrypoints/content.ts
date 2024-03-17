@@ -1,10 +1,10 @@
 import { process } from "@/lib/processor"
-import { getReasons, currTab } from "@/utils";
+import { HTMLRewriter } from "@/lib/process-html";
 import { mathjax3unneededPayload } from "@/lib/mathjax3";
+import { getReasons } from "@/utils";
 import type { mathJax3Payload } from "@/lib/mathjax3"
 import type { protocol } from "@/lib/types";
 import type { Runtime } from "wxt/browser";
-import { HTMLRewriter } from "@/lib/process-html";
 
 interface IExtraData {
 	mathjaxResult: mathJax3Payload
@@ -26,7 +26,6 @@ export default defineContentScript({
 		const reasons = getReasons(document)
 		if (reasons.iframes) {
 			browser.runtime.onMessage.addListener((request: protocol) => {
-				// console.log(request)
 				if (request?.for !== 'content' 
 					|| request?.cmd !== 'iframe-init-ulid' 
 					|| typeof request?.data?.src === 'undefined'
@@ -34,7 +33,12 @@ export default defineContentScript({
 				) return;
 				iframeMap.set(request?.data?.src.toString(), request?.data?.ulid.toString())
 			})
-			browser.runtime.sendMessage({ from: 'content', type: 'forward', cmd: 'iframe-init-ulid', for: 'iframe*'} satisfies protocol)
+			browser.runtime.sendMessage({ 
+				for: 'iframe*',
+				from: 'content', 
+				type: 'forward',
+				cmd: 'iframe-init-ulid', 
+			} satisfies protocol)
 		}
 	}
 });
@@ -90,7 +94,7 @@ function process_iframes() {
 			if (typeof currentULID === 'undefined') return;
 			const content = iframeContents[currentULID]
 			if (typeof content === 'undefined') return;
-			return elem('div', { innerHTML: content })
+			return elem('div', { innerHTML: content, class: '__turndown-iframe' })
 		}
 	})
 	rewriter.processHTML()

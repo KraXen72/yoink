@@ -1,9 +1,8 @@
 import { Readability } from '@mozilla/readability';
 
-import { mathjax2displayType, wrapMathjaxContent } from './mathjax';
+import { mathjax2displayType, wrapMathjaxContent } from '@/lib/mathjax';
 import type { math3Obj } from '@/lib/mathjax3';
-import { getReasons } from '@/utils';
-import { elem } from '@/utils';
+import { getReasons, elem } from '@/utils';
 import { ulid } from 'ulidx';
 
 function getCharCount(el: HTMLElement, s = ",") {
