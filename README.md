@@ -43,7 +43,7 @@ It's pretty simple!
 
 > [!NOTE]  
 > If you do not have any typescript experience or are simply unwilling to open a pull request, your site-specific rule will be considered, but is not guaranteed to be implemented!  
-> There are simply too may sites for one person to maintain the support for. I will primarily fix sites I use or sites that are easy enough to fix. For this reason, i created a simple api so you can fix your site!
+> There are simply too may sites for one person to maintain the support for. I will primarily fix sites I use or sites that are easy enough to fix. For this reason, I created a simple way for you to fix your site!
 
 1. follow the steps in [contributing](#contributing)
 2. go to [process-html.ts](./lib/process-html.ts)
