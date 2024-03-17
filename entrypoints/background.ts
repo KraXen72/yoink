@@ -7,8 +7,9 @@ export default defineBackground(() => {
 });
 
 async function msgCallback(request: protocol, sender: Runtime.MessageSender, sendResponse: () => void) {
-	if (request?.cmd === 'process' && request?.for === 'background') {
-		
-		// TODO sending back to popup/content script
+	if (request?.type === 'forward') {
+		delete request.type
+		console.log(`${request.from} ==> ${request.for}`, request)
+		browser.tabs.sendMessage(sender.tab?.id ?? (await currTab()).id, request)
 	}
 }

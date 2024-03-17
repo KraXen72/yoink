@@ -23,7 +23,7 @@ interface HTMLProcessRule {
  * provides access to a simple numeric storage and the whole dom  
  * **note: this is not cloudflare's HTMLRewriter**
  */
-class HTMLRewriter {
+export class HTMLRewriter {
 
 	dom: Document
 	rules: Record<string, HTMLProcessRule>
