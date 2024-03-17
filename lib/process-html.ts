@@ -1,5 +1,4 @@
 import { Readability } from '@mozilla/readability';
-
 import { mathjax2displayType, wrapMathjaxContent } from '@/lib/mathjax';
 import type { math3Obj } from '@/lib/mathjax3';
 import { getReasons, elem } from '@/utils';
