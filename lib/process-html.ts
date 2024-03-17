@@ -4,6 +4,7 @@ import { mathjax2displayType, wrapMathjaxContent } from './mathjax';
 import type { math3Obj } from '@/lib/mathjax3';
 import { getReasons } from '@/utils';
 import { elem } from '@/utils';
+import { ulid } from 'ulidx';
 
 function getCharCount(el: HTMLElement, s = ",") {
 	return el.innerText.split(s).length - 1;
@@ -67,12 +68,11 @@ const rewriter = new HTMLRewriter()
 
 // readability yeets headings if they have a *header* class. smh
 rewriter.addRule('preserveHeaders', {
-	selector: ':is(h1, h2, h3, h4, h5, h6)[class*="header"][id]',
+	selector: ':is(h1, h2, h3, h4, h5, h6)[class], :is(h1, h2, h3, h4, h5, h6)[id]',
 	rewrite: (el, dom, stor) => {
 		if (el.textContent.trim() === "") return;
-		const stripClasses = []
-		el.classList.forEach((val) => { if (val.includes("header")) stripClasses.push(val) })
-		el.classList.remove(...stripClasses)
+		el.className = ''
+		el.id = `__turndown-${ulid()}`
 	}
 })
 
