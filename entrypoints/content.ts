@@ -11,7 +11,7 @@ interface IExtraData {
 }
 
 /** 
- * map initial iframe src's (key) to a ulid that the iframe generates (value).
+ * initial iframe src's (key) => ulid that the iframe generates (value).
  * this solves the problem of iframes navigating to different locations and their href not matching
  */
 const iframeMap = new Map<string, string>()
@@ -50,9 +50,8 @@ async function msgCallback(request: protocol, sender: Runtime.MessageSender, sen
 
 		if (reasons.iframes) {
 			for (const ifr of document.querySelectorAll("iframe")) {
-				// console.log('sending for', iframeMap.get(ifr.src))
 
-				// this is not the best solution 
+				// this is not the best solution, but works for most cases
 				// there could be 2 iframes with the same src, but a different html due to js changing it
 				browser.runtime.sendMessage({ 
 					for: iframeMap.get(ifr.src) ?? ifr.src,
@@ -127,13 +126,7 @@ async function injectPageScript() {
 
 	if (pageScriptElem !== null) pageScriptElem.remove();
 	clearTimeout(scriptTimeout)
-	// console.log(mathjaxResult)
 
 	return { mathjaxResult }
-	// browser.runtime.sendMessage({
-	// 	cmd: 'process', for: 'background',
-	// 	html: document.documentElement.innerHTML,
-	// 	data: { mjx3: mathjaxResult }
-	// } satisfies protocol)
 }
 
