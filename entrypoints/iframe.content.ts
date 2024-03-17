@@ -15,24 +15,38 @@ export default defineContentScript({
 	}
 })
 
+function setULIDandSend() {
+	myUlid = ulid()
+	browser.runtime.sendMessage({ 
+		for: 'content',
+		from: 'iframe*',
+		cmd: 'iframe-init-ulid',
+		type: 'forward',
+		data: { src: window.self.location.href, ulid: myUlid },
+	} satisfies protocol )
+}
+
 async function msgCallback(req: protocol, sender, ) {
 	// console.log('iframe script', req, 'name:self', sender )
 	if (req.for === 'iframe*' && req.cmd === "iframe-init-ulid") {
-		myUlid = ulid()
-		browser.runtime.sendMessage({ 
-			for: 'content',
-			from: 'iframe*',
-			cmd: 'iframe-init-ulid',
-			type: 'forward',
-			data: { src: window.self.location.href, ulid: myUlid },
-		} satisfies protocol )
-	} else if (req.for === myUlid && req.cmd === 'iframe-get') {
-		browser.runtime.sendMessage({ 
+		setULIDandSend()
+	} else if (
+		(req.for === myUlid || (myUlid === '' && req.for === window.location.href)) 
+		&& req.cmd === 'iframe-get'
+	) {
+		const payload: protocol = { 
 			for: 'content',
 			from: myUlid,
 			cmd: 'iframe-get',
 			type: 'forward',
 			html: document.documentElement.innerHTML,
-		} satisfies protocol )
+		}
+		// if this iframe missed the iframe-init-ulid message, it can still generate an id and send it's content alongside the id and href.
+		// the href might not match the iframe's src, but it's still a lot better than compeltely failing to extract iframe for most cases
+		if (myUlid === '') {
+			myUlid = ulid()
+			payload.data = { ULIDpair: [window.self.location.href, myUlid] }
+		}
+		browser.runtime.sendMessage(payload)
 	}
 }

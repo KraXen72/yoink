@@ -50,17 +50,12 @@ async function msgCallback(request: protocol, sender: Runtime.MessageSender, sen
 
 		if (reasons.iframes) {
 			for (const ifr of document.querySelectorAll("iframe")) {
-				if (typeof iframeMap.get(ifr.src) === 'undefined') {
-					// TODO implement fallback getting with src, which also establishes ulid
-					console.warn('failed to get uuid for iframe with src:', ifr.src);
-					continue;
-				}
-				console.log('sending for', iframeMap.get(ifr.src))
+				// console.log('sending for', iframeMap.get(ifr.src))
 
 				// this is not the best solution 
 				// there could be 2 iframes with the same src, but a different html due to js changing it
 				browser.runtime.sendMessage({ 
-					for: iframeMap.get(ifr.src),
+					for: iframeMap.get(ifr.src) ?? ifr.src,
 					from: 'content',
 					type: 'forward', 
 					cmd: 'iframe-get', 
@@ -70,13 +65,23 @@ async function msgCallback(request: protocol, sender: Runtime.MessageSender, sen
 			process_bare()
 		}
 	} else if (request.for === 'content' && request.cmd === 'iframe-get') {
+		if (request.from === '') {
+			if (!Array.isArray(request?.data?.ULIDpair) || request?.data?.ULIDpair?.length !== 2) {
+				console.warn(`couldn't get contents of iframe with no ulid`)
+				return;
+			} 
+			const [ newSrc, newULID ] = request?.data?.ULIDpair as [string, string]
+			iframeMap.set(newSrc, newULID)
+			request.from = newULID
+		}
+
 		iframeContents[request.from] = request.html
 		if (Object.keys(iframeContents).length >= iframeMap.size) process_iframes()
 	}
 }
 
 function process_iframes() {
-	// console.log('gonna process iframes')
+	console.log('gonna process iframes', 'map', Object.fromEntries(iframeMap.entries()), iframeContents)
 	const todoDOM = new DOMParser().parseFromString(document.documentElement.innerHTML, 'text/html')
 	const rewriter = new HTMLRewriter(todoDOM)
 	rewriter.addRule('iframe-repl', {
