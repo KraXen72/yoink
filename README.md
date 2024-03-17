@@ -62,7 +62,7 @@ rewriter.addRule('change_spans_to_divs', { // first argument is rule name
 		// - you can use the 'elem' helper function to easily create a new element
 		//     - the second parameter is exactly the same as things on document.createElement, apart from 'class', which can take in a string or an array of classes
 		const wrap = elem('div', {
-			textContent: el.innerHTML,
+			innerHTML: el.innerHTML,
 			class: 'my-cool-class' // or ['myclass1', 'myclass2']
 		})
 		return wrap
