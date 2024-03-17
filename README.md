@@ -1,7 +1,7 @@
 # yoink - web clipper for obsidian
-originally based on [kepano's obsidian web clipper bookmarklet](https://gist.github.com/kepano/90c05f162c37cf730abb8ff027987ca3)  
-
 uses [@joplin/turndown](https://github.com/laurent22/joplin/tree/dev/packages/turndown), [readability](https://github.com/mozilla/readability) and [wxt](https://github.com/wxt-dev/wxt), among others.
+
+originally based on [kepano's obsidian web clipper bookmarklet](https://gist.github.com/kepano/90c05f162c37cf730abb8ff027987ca3)  
 
 work in progress.
 
@@ -26,20 +26,22 @@ work in progress.
 - custom lightweight HTMLRewriter - modify or replace dom nodes before converting them to markdown based on a querySelector
 
 ## contributing
-Have [git](https://git-scm.com/downloads), [nodejs](https://nodejs.org/enhttps://pnpm.io/installation) and [pnpm](https://pnpm.io/installation) installed.
+Have [git](https://git-scm.com/downloads), [nodejs](https://nodejs.org/enhttps://pnpm.io/installation) and [pnpm](https://pnpm.io/installation) (`npm i -g`) installed.
 1. `git clone https://github.com/KraXen72/yoink`
 2. `cd yoink`
 3. `pnpm i`
 4. `pnpm dev`
-- It will new chrome/firefox window with some sample sites for testing and the extension loaded. Live reload is on - if you make a change, the sites refresh themselves.
+- It will new chrome/firefox window with some sample sites for testing and the extension loaded. Live reload is on: if you make a change, the sites refresh themselves.
 - If you edit the `iframe.content.ts`, a manual refresh with `F5` or the button might be necessary
 - If you don't have firefox or chrome installed, please install one of them or change the browser path in `wxt.config.ts` according to the [docs](https://wxt.dev/guide/development.html#configure-browser-startup) to your browser path.
 
 ## site-specific fixes
-If yoink does not work on your favorite site, report open an issue! However, some sites are broken, because of how readability.js or turndown handle them - if you confirm this is the case or are told so in the issue, please open a pull request with a site-specific fix. It's pretty simple!
+If yoink does not work on your favorite site, open an issue!  
+However, some sites are broken, because of how readability.js or turndown handle them.  
+If you confirm this is the case or are told so in the issue, please open a pull request with a site-specific fix. It's pretty simple!
 
 > [!NOTE]  
-> If you do not have any typescript experience or are simply unwilling to open a pull request, your site-specific rule will be considered, but is not guaranteed to be implemented!
+> If you do not have any typescript experience or are simply unwilling to open a pull request, your site-specific rule will be considered, but is not guaranteed to be implemented!  
 > There are simply too may sites for one person to maintain the support for. I will primarily fix sites I use or sites that are easy enough to fix. For this reason, i created a simple api so you can fix your site!
 
 1. follow the steps in [contributing](#contributing)
