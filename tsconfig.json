@@ -2,6 +2,7 @@
   "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
 	"strictNullChecks": false,
-	"noImplicitAny": false
+	"noImplicitAny": false,
+	"sourceMap": true
   }
 }

@@ -1,6 +1,7 @@
 import { processHTML } from '@/lib/process-html';
 import { processMarkdown } from '@/lib/process-markdown';
 import type { mathJax3Payload } from '@/lib/mathjax3';
+import type { protocol } from './types';
 
 function convertDate(date) {
 	var yyyy = date.getFullYear().toString();
@@ -11,30 +12,21 @@ function convertDate(date) {
 	return yyyy + '-' + (mmChars[1] ? mm : "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
 }
 
-function getSelectionHtml() {
-	const sel = window.getSelection();
-	if (!sel.rangeCount) return '';
-	const container = document.createElement("div");
-	for (let i = 0; i < sel.rangeCount; ++i) {
-		container.appendChild(sel.getRangeAt(i).cloneContents());
-	}
-	return container.innerHTML;
-}
+// function getFileName(fileName) {
+// 	var userAgent = window.navigator.userAgent,
+// 		platform = window.navigator.platform, // FIXME
+// 		windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
 
-function getFileName(fileName) {
-	var userAgent = window.navigator.userAgent,
-		platform = window.navigator.platform, // FIXME
-		windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
+// 	if (windowsPlatforms.indexOf(platform) !== -1) {
+// 		fileName = fileName.replace(':', '').replace(/[/\\?%*|"<>]/g, '-');
+// 	} else {
+// 		fileName = fileName.replace(':', '').replace(/\//g, '-').replace(/\\/g, '-');
+// 	}
+// 	return fileName;
+// }
+// let vaultName = (vault) ? '&vault=' + encodeURIComponent(`${vault}`) : ''
 
-	if (windowsPlatforms.indexOf(platform) !== -1) {
-		fileName = fileName.replace(':', '').replace(/[/\\?%*|"<>]/g, '-');
-	} else {
-		fileName = fileName.replace(':', '').replace(/\//g, '-').replace(/\\/g, '-');
-	}
-	return fileName;
-}
-
-export async function process(dom: Document, mjx3Info: mathJax3Payload ) {
+export async function processContent(dom: Document, mjx3Info: mathJax3Payload ) {
 	// obsidian stuff
 	const vault = "";
 	const folder = "Clippings/";
@@ -75,22 +67,16 @@ export async function process(dom: Document, mjx3Info: mathJax3Payload ) {
 
 	console.log('processor', mjx3Info)
 	const mjx3Data = mjx3Info && mjx3Info.status === 200 ? mjx3Info.data : []
-	const content = await processHTML(dom, mjx3Data)
-	// console.log(content)
-	// const fileName = getFileName(title);
-
-	const selection = getSelectionHtml();
-	const markdownify = selection || content;
-	let vaultName = (vault) ? '&vault=' + encodeURIComponent(`${vault}`) : ''
-
-	const markdownBody = processMarkdown(markdownify)
+	const rewrittenHTML = await processHTML(dom, mjx3Data)
+	console.log(rewrittenHTML)
+	const resultingMarkdown = processMarkdown(rewrittenHTML)
 
 	/* YAML front matter as tags render cleaner with special chars  */
 	const fileContent = "---\n"
 		+ Object.entries(meta)
 			.map(([k, v]) => `${k}: ${Array.isArray(v) ? `[${v.join(",")}]` : v}`)
 			.join("\n")
-		+ '\n---\n\n' + markdownBody
+		+ '\n---\n\n' + resultingMarkdown
 
 	console.log(fileContent)
 	// document.location.href = "obsidian://new?"

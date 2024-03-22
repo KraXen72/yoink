@@ -6,10 +6,17 @@ export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id });
 });
 
-async function msgCallback(request: protocol, sender: Runtime.MessageSender, sendResponse: () => void) {
+async function msgCallback(
+	request: protocol, 
+	sender: Runtime.MessageSender, 
+	sendResponse: (msg: protocol) => void
+) {
+	console.log(
+		`${request?.type === 'forward' ? '[forward] ': ''}${request.from} ==> ${request.for}`,
+		request
+	)
 	if (request?.type === 'forward') {
 		delete request.type
-		console.log(`${request.from} ==> ${request.for}`, request)
 		browser.tabs.sendMessage(sender.tab?.id ?? (await currTab()).id, request)
 	}
 }

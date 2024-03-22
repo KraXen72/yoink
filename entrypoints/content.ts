@@ -1,4 +1,4 @@
-import { process } from "@/lib/processor"
+import { processContent } from "@/lib/processor"
 import { HTMLRewriter } from "@/lib/process-html";
 import { mathjax3unneededPayload } from "@/lib/mathjax3";
 import { getReasons } from "@/utils";
@@ -17,6 +17,16 @@ interface IExtraData {
 const iframeMap = new Map<string, string>()
 const iframeContents = {}
 let extraData: IExtraData = { mathjaxResult: null };
+
+function getSelectionHtml() {
+	const sel = window.getSelection();
+	if (!sel.rangeCount) return '';
+	const container = document.createElement("div");
+	for (let i = 0; i < sel.rangeCount; ++i) {
+		container.appendChild(sel.getRangeAt(i).cloneContents());
+	}
+	return container.innerHTML;
+}
 
 export default defineContentScript({
 	matches: ['<all_urls>'],
@@ -83,9 +93,18 @@ async function msgCallback(request: protocol, sender: Runtime.MessageSender, sen
 	}
 }
 
+function getSelOrDOM() {
+	const selHTML = getSelectionHtml()
+	if (selHTML !== '') {
+		return selHTML
+	} else {
+		return document.documentElement.innerHTML
+	}
+}
+
 function process_iframes() {
 	console.log('gonna process iframes', 'map', Object.fromEntries(iframeMap.entries()), iframeContents)
-	const todoDOM = new DOMParser().parseFromString(document.documentElement.innerHTML, 'text/html')
+	const todoDOM = new DOMParser().parseFromString(getSelOrDOM(), 'text/html')
 	const rewriter = new HTMLRewriter(todoDOM)
 	rewriter.addRule('iframe-repl', {
 		selector: 'iframe',
@@ -98,15 +117,15 @@ function process_iframes() {
 		}
 	})
 	rewriter.processHTML()
-	process(
+	processContent(
 		todoDOM,
 		extraData.mathjaxResult
 	)
 }
 
 function process_bare() {
-	process(
-		new DOMParser().parseFromString(document.documentElement.innerHTML, 'text/html'),
+	processContent(
+		new DOMParser().parseFromString(getSelOrDOM(), 'text/html'),
 		extraData.mathjaxResult
 	)
 }

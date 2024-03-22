@@ -3,8 +3,7 @@ import { defineConfig } from 'wxt';
 // See https://wxt.dev/api/config.html
 export default defineConfig({
 	runner: {
-		chromiumArgs: ["--devtools"],
-		openDevtools: true,
+		chromiumProfile: 'C:\\Users\\Nex\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1',	
 		startUrls: [
 			"https://jrsinclair.com/articles/2023/how-to-consume-a-paginated-api-using-javascript-async-generators/",
 			"https://mathjax.github.io/MathJax-demos-web/tex-chtml.html",

@@ -1,9 +1,9 @@
 import { EditorView, keymap, highlightSpecialChars, drawSelection, dropCursor, highlightActiveLine } from '@codemirror/view';
 import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands'
+import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { markdown } from "@codemirror/lang-markdown"
 import { languages } from "@codemirror/language-data"
 import { syntaxHighlighting, indentOnInput, bracketMatching } from "@codemirror/language";
-import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { oneDarkHighlightStyle, oneDarkTheme } from "@codemirror/theme-one-dark";
 import { wrappedLineIndent } from 'codemirror-wrapped-line-indent';
 

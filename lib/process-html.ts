@@ -137,14 +137,13 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 	})
 
 	rewriter.processHTML()
-	// console.log(rewriter.dom.documentElement.innerHTML)
+	// return rewriter.dom.documentElement.innerHTML
 
 	const { title, byline, content } = new Readability(rewriter.dom, {
 		keepClasses: true,
 		debug: false,
 	}).parse();
 	// console.log('read', reasons, content)
-
 	return content;
 }
 

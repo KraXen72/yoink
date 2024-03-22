@@ -2754,8 +2754,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
-  /linkedom@0.16.8:
-    resolution: {integrity: sha512-+HtHVHBb3yZKlP9pgcJdi1AIG9tsAuo+Qtlz+79cCTsxgQwDzajsZjYvpp+DEckCK/zoGVhzkADniYZQ57KcFQ==}
+  /linkedom@0.16.10:
+    resolution: {integrity: sha512-c316CX1FiPMU1v4+ExUzxr/gD5xqyCX2M3qtyL2nuoYQTsk0F5jRRwOFG7jRRxD3w7ONbLTLMrGBvq++Hmzzhg==}
     dependencies:
       css-select: 5.1.0
       cssom: 0.5.0
@@ -4427,7 +4427,7 @@ packages:
       jiti: 1.21.0
       json5: 2.2.3
       jszip: 3.10.1
-      linkedom: 0.16.8
+      linkedom: 0.16.10
       minimatch: 9.0.3
       natural-compare: 1.4.0
       normalize-path: 3.0.0
