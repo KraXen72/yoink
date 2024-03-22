@@ -3,6 +3,8 @@ import { processMarkdown } from '@/lib/process-markdown';
 import type { mathJax3Payload } from '@/lib/mathjax3';
 import type { protocol } from './types';
 
+const yamlSpecial = [":", "{", "}", "[", "]", ",", "&", "*", "#", "?", "!", "|", "-", "<", ">", "=", "%", "@", "\\", "\n"]
+
 function convertDate(date) {
 	var yyyy = date.getFullYear().toString();
 	var mm = (date.getMonth() + 1).toString();
@@ -10,6 +12,30 @@ function convertDate(date) {
 	var mmChars = mm.split('');
 	var ddChars = dd.split('');
 	return yyyy + '-' + (mmChars[1] ? mm : "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
+}
+
+/** Poor man's Object -> YAML converter because i cba to add another dependency */
+function stringifyYAMLHeader(obj: Record<string, string | string[] | number>) {
+	let yaml = '---\n'
+	for (const [k, v] of Object.entries(obj)) {
+		let m = `${k}: `
+		if (Array.isArray(v)) {
+			m += `[${(v as string[]).join(",")}]`
+		} else {
+			if (typeof v === "string" && yamlSpecial.some(ch => v.includes(ch))) {
+				if (v.includes('"') && v.includes("'")) {
+					m += `"${v.replaceAll("\"", "\\\"")}"`
+				} else {
+					m += v.includes('"') ? `'${v}'` : `"${v}"`
+				}
+			} else {
+				m += `${v}`
+			}
+		}
+		yaml += m + "\n"
+	} 
+	yaml += "---\n\n"
+	return yaml
 }
 
 // function getFileName(fileName) {
@@ -25,7 +51,6 @@ function convertDate(date) {
 // 	return fileName;
 // }
 // let vaultName = (vault) ? '&vault=' + encodeURIComponent(`${vault}`) : ''
-const yamlSpecial = [":", "{", "}", "[", "]", ",", "&", "*", "#", "?", "!", "|", "-", "<", ">", "=", "%", "@", "\\", "\n"]
 
 export async function processContent(dom: Document, mjx3Info: mathJax3Payload ) {
 	// obsidian stuff
@@ -72,29 +97,17 @@ export async function processContent(dom: Document, mjx3Info: mathJax3Payload ) 
 	const resultingMarkdown = processMarkdown(rewrittenHTML)
 
 	/* YAML front matter as tags render cleaner with special chars  */
-	const fileContent = "---\n"
-		+ Object.entries(meta)
-			.map(([k, v]) => {
-				let m = `${k}: `
-				if (Array.isArray(v)) {
-					m += `[${(v as string[]).join(",")}]`
-				} else {
-					if (yamlSpecial.some(ch => v.includes(ch))) {
-						if (v.includes('"') && v.includes("'")) {
-							m += `"${v.replaceAll("\"", "\\\"")}"`
-						} else {
-							m += v.includes('"') ? `'${v}'` : `"${v}"`
-						}
-					} else {
-						m += v
-					}
-				}
-				return m
-			})
-			.join("\n")
-		+ '\n---\n\n' + resultingMarkdown
-
+	const fileContent = stringifyYAMLHeader(meta) + resultingMarkdown
 	console.log(fileContent)
+
+	browser.runtime.sendMessage({
+		cmd: 'set-codemirror',
+		for: 'popup',
+		from: 'content',
+		type: 'forward',
+		data: { content: fileContent }
+	} satisfies protocol)
+
 	// document.location.href = "obsidian://new?"
 	// 	+ "file=" + encodeURIComponent(folder + fileName)
 	// 	+ "&content=" + encodeURIComponent(fileContent)

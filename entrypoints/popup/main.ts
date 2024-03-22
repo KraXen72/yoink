@@ -4,7 +4,7 @@ import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } 
 import { markdown } from "@codemirror/lang-markdown"
 import { languages } from "@codemirror/language-data"
 import { syntaxHighlighting, indentOnInput, bracketMatching } from "@codemirror/language";
-import { oneDarkHighlightStyle, oneDarkTheme } from "@codemirror/theme-one-dark";
+import { materialDarkTheme, materialDarkHighlightStyle } from "cm6-theme-material-dark";
 import { wrappedLineIndent } from 'codemirror-wrapped-line-indent';
 
 import type { protocol } from '@/lib/types';
@@ -16,13 +16,13 @@ let view = new EditorView({
 	doc: "\n".repeat(20),
 	extensions: [
 		// modified basicSetup sans line numbers & other useless stuff
+		materialDarkTheme, // custom theme
+		syntaxHighlighting(materialDarkHighlightStyle, {fallback: true}),
 		highlightSpecialChars(),
 		history(),
 		drawSelection(),
 		dropCursor(),
 		indentOnInput(),
-		oneDarkTheme,
-		syntaxHighlighting(oneDarkHighlightStyle, {fallback: true}),
 		bracketMatching(),
 		closeBrackets(),
 		highlightActiveLine(),
@@ -42,7 +42,7 @@ let view = new EditorView({
 })
 
 function setContent(val: string) {
-	view.state.update({ changes: { from: 0, to: view.state.doc.length, insert: val }})
+	view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: val }})
 }
 
 async function trigger() {
@@ -55,3 +55,16 @@ async function trigger() {
 
 document.getElementById("process-btn").addEventListener("click", trigger)
 document.addEventListener("DOMContentLoaded", trigger)
+
+browser.runtime.onMessage.addListener((request: protocol) => {
+	if (request?.for !== 'popup') return;
+	if (request?.cmd === "set-codemirror" && typeof request?.data?.content === 'string') {
+		setContent(request.data.content)
+	}
+	console.log('recieved:', request)
+	// view.state.update({ changes: { 
+	// 	to: view.state.doc.length, 
+	// 	from: view.state.doc.length, 
+	// 	insert: JSON.stringify(request) + "\n" 
+	// }})
+})

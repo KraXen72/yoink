@@ -13,9 +13,9 @@ export default defineConfig({
 			"https://zealot.hu/absolem/",
 			"file:///D:/coding/%23sandbox/test%20pages%20for%20yoink/verge-stripped.html",
 			"https://learnxinyminutes.com/docs/sql/",
-			"https://slovencina.eu/gramatika/vety-a-suvetia/suvetie/",
 			"https://referaty.aktuality.sk/jozef-gregor-tajovsky-statky-zmatky/referat-6627",
-			"https://www.zones.sk/studentske-prace/gramatika/5465-slovotvorne-postupy-odvodzovanie-skladanie-skracovanie/"
+			"https://www.zones.sk/studentske-prace/gramatika/5465-slovotvorne-postupy-odvodzovanie-skladanie-skracovanie/",
+			"https://romgrk.com/posts/optimizing-javascript#5-avoid-cache-misses"
 		],
 	},
 	manifest: {

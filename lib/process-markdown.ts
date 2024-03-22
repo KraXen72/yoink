@@ -25,7 +25,7 @@ turndownService.addRule("mathjax2-katex", {
 			|| node.classList.contains("__katex-turndown-block")
 	},
 	escapeContent: () => false,
-	replacement: function (content: string, node: HTMLElement) {
+	replacement(content: string, node: HTMLElement) {
 		const delim = node.classList.toString().includes("-block") ? "$$" : "$"
 		let out = wrapMathjaxContent(content, delim)
 		// console.table({ formatted: out, content, delim })

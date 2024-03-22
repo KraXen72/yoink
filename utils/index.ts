@@ -42,7 +42,3 @@ export function elem(
 	}
 	return element
 }
-
-export function getCharCount(el: HTMLElement, s = ",") {
-	return el.innerText.split(s).length - 1;
-}

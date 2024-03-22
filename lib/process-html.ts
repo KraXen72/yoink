@@ -1,8 +1,25 @@
 import { Readability } from '@mozilla/readability';
 import { mathjax2displayType, wrapMathjaxContent } from '@/lib/mathjax';
 import type { math3Obj } from '@/lib/mathjax3';
-import { getReasons, elem, getCharCount } from '@/utils';
+import { getReasons, elem } from '@/utils';
 import { ulid } from 'ulidx';
+
+function getCharCount(el: HTMLElement, s = ",") {
+	return el.innerText.split(s).length - 1;
+}
+
+// doesen't handle codeblocks handled by turndown, but i don't wanna create duplicate rules
+// also doesen't have all languages. it's good enough for now though
+const shortLangMap: Map<string, string> = new Map()
+shortLangMap.set('c++', 'cpp')
+shortLangMap.set('javascript', 'js')
+shortLangMap.set('typescript', 'ts')
+shortLangMap.set('python', 'py')
+
+function codeblockLanguageClass(lang: string) {
+	const lang2 = shortLangMap.get(lang) ?? lang
+	return `language-${lang2}`
+}
 
 interface HTMLProcessRule {
 	/** boolean check for the rule. otherwise rule will run always */
@@ -60,46 +77,6 @@ export class HTMLRewriter {
 
 const rewriter = new HTMLRewriter()
 
-// readability yeets headings if they have a *header* class. smh
-rewriter.addRule('preserveHeaders', {
-	selector: ':is(h1, h2, h3, h4, h5, h6)[class], :is(h1, h2, h3, h4, h5, h6)[id]',
-	rewrite: (el, dom, stor) => {
-		if (el.textContent.trim() === "") return;
-		el.className = ''
-		el.id = `__turndown-${ulid()}`
-	}
-})
-
-rewriter.addRule('mathjax2', {
-	selector: `script[type^="math/tex"], script[type^="math/asciimath"]`,
-	rewrite: (el, dom, stor) => {
-		const isBlock = mathjax2displayType(el) === 'block'
-		const wrap = elem(isBlock ? 'pre' : 'span', {
-			textContent: el.innerHTML,
-			class: isBlock ? "__mjx2-turndown-block" : "__mjx2-turndown-inline"
-		})
-		return wrap
-	}
-})
-
-rewriter.addRule('katex', {
-	selector: '.katex-mathml',
-	rewrite: (el, dom, stor) => {
-		const texEl = el.querySelector(`math > semantics > annotation[encoding*="tex"]`)
-		if (el.querySelector('math') === null || texEl === null) return;
-
-		const isBlock = (el.querySelector(`math`).hasAttribute('display')
-			&& el.querySelector(`math`).getAttribute("display") === "block"
-		) || el.querySelector(`math > semantics > mrow > mstyle[displaystyle="true"]`) !== null
-
-		const wrap = elem(isBlock ? 'pre' : 'span', {
-			class: isBlock ? "__katex-turndown-block" : "__katex-turndown-inline",
-			textContent: texEl.textContent,
-		})
-		return wrap
-	}
-})
-
 export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 	const reasons = getReasons(dom)
 	rewriter.registerDOM(dom)
@@ -140,9 +117,59 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 		keepClasses: true,
 		debug: false,
 	}).parse();
-	// console.log('read', content)
+	console.log('read', content)
 	return content;
 }
+
+// readability yeets headings if they have a *header* class. smh
+rewriter.addRule('preserveHeaders', {
+	selector: ':is(h1, h2, h3, h4, h5, h6)[class], :is(h1, h2, h3, h4, h5, h6)[id]',
+	rewrite: (el, dom, stor) => {
+		if (el.textContent.trim() === "") return;
+		el.className = ''
+		el.id = `__turndown-${ulid()}`
+	}
+})
+
+// codeblocks which have a data-language but not a language-something class 
+rewriter.addRule('codeblocks-data-language', {
+	selector: 'code[data-language]',
+	rewrite(el, dom, storage) {
+		const cl = codeblockLanguageClass(el.dataset.language)
+		el.classList.add(cl)
+		el?.parentElement?.classList?.add(cl)
+	},
+}) 
+
+rewriter.addRule('mathjax2', {
+	selector: `script[type^="math/tex"], script[type^="math/asciimath"]`,
+	rewrite: (el, dom, stor) => {
+		const isBlock = mathjax2displayType(el) === 'block'
+		const wrap = elem(isBlock ? 'pre' : 'span', {
+			textContent: el.innerHTML,
+			class: isBlock ? "__mjx2-turndown-block" : "__mjx2-turndown-inline"
+		})
+		return wrap
+	}
+})
+
+rewriter.addRule('katex', {
+	selector: '.katex-mathml',
+	rewrite: (el, dom, stor) => {
+		const texEl = el.querySelector(`math > semantics > annotation[encoding*="tex"]`)
+		if (el.querySelector('math') === null || texEl === null) return;
+
+		const isBlock = (el.querySelector(`math`).hasAttribute('display')
+			&& el.querySelector(`math`).getAttribute("display") === "block"
+		) || el.querySelector(`math > semantics > mrow > mstyle[displaystyle="true"]`) !== null
+
+		const wrap = elem(isBlock ? 'pre' : 'span', {
+			class: isBlock ? "__katex-turndown-block" : "__katex-turndown-inline",
+			textContent: texEl.textContent,
+		})
+		return wrap
+	}
+})
 
 // site-specific rules
 // feel free to add site specific rules below
@@ -178,8 +205,9 @@ rewriter.addRule('learnxinyminutes.com', {
 		const preEl = elem('pre')
 		const codeEl = elem('code', { innerHTML: el.firstElementChild.innerHTML })
 		if (stor.learnxLang.trim() !== '') {
-			preEl.classList.add(`language-${stor.learnxLang}`)
-			codeEl.classList.add(`language-${stor.learnxLang}`)
+			const cl = codeblockLanguageClass(stor.learnxLang)
+			preEl.classList.add(cl)
+			codeEl.classList.add(cl)
 		}
 		preEl.appendChild(codeEl)
 		return preEl
