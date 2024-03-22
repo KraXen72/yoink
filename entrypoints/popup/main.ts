@@ -1,13 +1,14 @@
-import { EditorView, keymap, highlightSpecialChars, drawSelection, dropCursor, highlightActiveLine } from '@codemirror/view';
+import { EditorView, keymap, highlightSpecialChars, drawSelection, dropCursor, highlightActiveLine, highlightActiveLineGutter } from '@codemirror/view';
 import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands'
 import { autocompletion, completionKeymap, closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { markdown } from "@codemirror/lang-markdown"
 import { languages } from "@codemirror/language-data"
-import { syntaxHighlighting, indentOnInput, bracketMatching } from "@codemirror/language";
-import { materialDarkTheme, materialDarkHighlightStyle } from "cm6-theme-material-dark";
+import { syntaxHighlighting, indentOnInput, bracketMatching, foldGutter, foldKeymap } from "@codemirror/language";
+import { oneDarkTheme, oneDarkHighlightStyle } from "@codemirror/theme-one-dark";
 import { wrappedLineIndent } from 'codemirror-wrapped-line-indent';
 
 import type { protocol } from '@/lib/types';
+import { frontmatter } from '@/lib/frontmatter';
 
 // The Markdown parser will dynamically load parsers
 // for code blocks, using @codemirror/language-data to
@@ -16,19 +17,22 @@ let view = new EditorView({
 	doc: "\n".repeat(20),
 	extensions: [
 		// modified basicSetup sans line numbers & other useless stuff
-		materialDarkTheme, // custom theme
-		syntaxHighlighting(materialDarkHighlightStyle, {fallback: true}),
 		highlightSpecialChars(),
 		history(),
+		foldGutter(),
 		drawSelection(),
 		dropCursor(),
 		indentOnInput(),
 		bracketMatching(),
 		closeBrackets(),
 		highlightActiveLine(),
+		highlightActiveLineGutter(),
 		autocompletion(),
+		oneDarkTheme, // custom theme
+		syntaxHighlighting(oneDarkHighlightStyle, { fallback: true,  }),
 		keymap.of([
 			indentWithTab,
+			...foldKeymap,
 			...closeBracketsKeymap,
 			...defaultKeymap,
 			...historyKeymap,
@@ -36,7 +40,7 @@ let view = new EditorView({
 		]),
 		EditorView.lineWrapping,
 		wrappedLineIndent,
-		markdown({ codeLanguages: languages }),
+		markdown({ codeLanguages: languages, extensions: [ frontmatter ] }),
 	],
 	parent: document.getElementById("cm-wrapper"),
 })

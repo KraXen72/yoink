@@ -31,8 +31,12 @@
     "@codemirror/lang-markdown": "^6.2.4",
     "@codemirror/language": "^6.10.1",
     "@codemirror/language-data": "^6.4.1",
+    "@codemirror/legacy-modes": "^6.3.3",
+    "@codemirror/theme-one-dark": "^6.1.2",
     "@codemirror/view": "^6.26.0",
-    "cm6-theme-material-dark": "^0.2.0",
+    "@lezer/common": "^1.2.1",
+    "@lezer/highlight": "^1.2.0",
+    "@lezer/markdown": "^1.2.0",
     "codemirror-wrapped-line-indent": "^1.0.8",
     "ulidx": "^2.3.0"
   }
