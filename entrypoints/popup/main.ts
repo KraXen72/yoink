@@ -38,7 +38,7 @@ let view = new EditorView({
 		wrappedLineIndent,
 		markdown({ codeLanguages: languages }),
 	],
-	parent: document.getElementById("cm-wrapper")
+	parent: document.getElementById("cm-wrapper"),
 })
 
 function setContent(val: string) {
