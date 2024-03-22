@@ -34,7 +34,7 @@ export default defineContentScript({
 		console.log(`Hello from yoink's content script`, window.self === window.top)
 		browser.runtime.onMessage.addListener(msgCallback) 
 		const reasons = getReasons(document)
-		if (reasons.iframes) {
+		if (reasons.iframes && iframeMap.size > 0) {
 			browser.runtime.onMessage.addListener((request: protocol) => {
 				if (request?.for !== 'content' 
 					|| request?.cmd !== 'iframe-init-ulid' 

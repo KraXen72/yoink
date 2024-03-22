@@ -3,12 +3,23 @@ import type { protocol } from "@/lib/types";
 
 let myUlid = ''
 
+const blacklistedOrigins = [
+	'https://tpc.googlesyndication.com',
+	'https://googleads.g.doubleclick.net'
+]
+
 export default defineContentScript({
 	matches: ['<all_urls>'],
 	allFrames: true,
 	runAt: 'document_start',
 	main() { 
-		if (window.self === window.top) return; // return if we're in the top window.
+		if (
+			window.self === window.top // return if we're in the top window.
+			|| window.location.origin === 'https://www.google.com' // don't inject into recaptcha
+				&& window.location.href.includes('/recaptcha/')
+			|| blacklistedOrigins.includes(window.location.origin)
+		) return;
+		
 		console.log(`Hello from yoink's iframe content script`, window.self.location.href)
 		browser.runtime.onMessage.addListener(msgCallback)
 	}

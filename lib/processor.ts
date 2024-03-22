@@ -25,6 +25,7 @@ function convertDate(date) {
 // 	return fileName;
 // }
 // let vaultName = (vault) ? '&vault=' + encodeURIComponent(`${vault}`) : ''
+const yamlSpecial = [":", "{", "}", "[", "]", ",", "&", "*", "#", "?", "!", "|", "-", "<", ">", "=", "%", "@", "\\", "\n"]
 
 export async function processContent(dom: Document, mjx3Info: mathJax3Payload ) {
 	// obsidian stuff
@@ -73,7 +74,23 @@ export async function processContent(dom: Document, mjx3Info: mathJax3Payload ) 
 	/* YAML front matter as tags render cleaner with special chars  */
 	const fileContent = "---\n"
 		+ Object.entries(meta)
-			.map(([k, v]) => `${k}: ${Array.isArray(v) ? `[${v.join(",")}]` : v}`)
+			.map(([k, v]) => {
+				let m = `${k}: `
+				if (Array.isArray(v)) {
+					m += `[${(v as string[]).join(",")}]`
+				} else {
+					if (yamlSpecial.some(ch => v.includes(ch))) {
+						if (v.includes('"') && v.includes("'")) {
+							m += `"${v.replaceAll("\"", "\\\"")}"`
+						} else {
+							m += v.includes('"') ? `'${v}'` : `"${v}"`
+						}
+					} else {
+						m += v
+					}
+				}
+				return m
+			})
 			.join("\n")
 		+ '\n---\n\n' + resultingMarkdown
 
