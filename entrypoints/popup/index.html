@@ -5,10 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>yoink</title>
 	<meta name="manifest.type" content="browser_action" />
+	<link href="~/assets/main.css" rel="stylesheet" />
 </head>
 <body>
-	<main class="main">
-		<button id="process-btn">process</button>
+	<main class="overflow-x-auto">
+		<button id="process-btn" class="h-8">process</button>
+		<div id="cm-wrapper" class="overflow-y-auto h-full max-h-[calc(100vh-2rem)]"></div>
 	</main>
 	<script type="module" src="./main.ts"></script>
 </body>
