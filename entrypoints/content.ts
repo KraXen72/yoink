@@ -16,7 +16,8 @@ interface IExtraData {
  */
 const iframeMap = new Map<string, string>()
 const iframeContents = {}
-let extraData: IExtraData = { mathjaxResult: mathjax3unneededPayload };
+//@ts-ignore
+let extraData: IExtraData = { mathjaxResult: {} }; 
 
 export default defineContentScript({
 	matches: ['<all_urls>'],

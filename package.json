@@ -18,9 +18,12 @@
     "@joplin/turndown": "^4.0.73",
     "@joplin/turndown-plugin-gfm": "^1.0.55",
     "@mozilla/readability": "^0.5.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.2",
     "@types/turndown": "^5.0.4",
-    "typescript": "^5.3.3",
-    "wxt": "^0.17.0"
+    "svelte": "^4.2.12",
+    "typescript": "^5.4.3",
+    "unocss": "^0.58.6",
+    "wxt": "^0.17.7"
   },
   "dependencies": {
     "ulidx": "^2.3.0"

@@ -1,13 +1,9 @@
-import { protocol } from '@/lib/types';
+import 'virtual:uno.css'
 import './style.css';
+import App from '@/components/App.svelte'
 
-async function trigger() {
-	const tabs = await browser.tabs.query({ active: true, currentWindow: true })
-	for (const tab of tabs) {
-		if (!tab.id) continue;
-		await browser.tabs.sendMessage(tab.id, { cmd: "process", for: 'content', from: 'popup' } satisfies protocol);
-	}
-}
+const app = new App({
+  target: document.getElementById('app'),
+})
 
-document.getElementById("process-btn").addEventListener("click", trigger)
-document.addEventListener("DOMContentLoaded", trigger)
+export default app

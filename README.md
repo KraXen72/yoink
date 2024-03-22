@@ -5,10 +5,13 @@ originally based on [kepano's obsidian web clipper bookmarklet](https://gist.git
 
 work in progress.
 
+## installation
+- todo - add instructions before wxt publishing
+
 ## aim
-- support most of markdownload's extraction features
-  - [x] metadata extraction
-  - [ ] image extraction
+- feature parity with markdownload (partial, most important only)
+  - [x] metadata extractio
+  - [ ] image extracti
   - [ ] remote image downloading
   - [x] codeblocks
   - [x] mathjax v2
@@ -19,8 +22,6 @@ work in progress.
   - [x] assume codeblock language for syntax highlighting
   - [x] extract content from iframes
   - [ ] set image size for obsidian-style images
-- likely won't be implemented
-  - bloated and full-width settings page
 
 ## features / internals
 - custom lightweight HTMLRewriter - modify or replace dom nodes before converting them to markdown based on a querySelector
