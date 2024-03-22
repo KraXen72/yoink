@@ -68,7 +68,6 @@ export async function processContent(dom: Document, mjx3Info: mathJax3Payload ) 
 	console.log('processor', mjx3Info)
 	const mjx3Data = mjx3Info && mjx3Info.status === 200 ? mjx3Info.data : []
 	const rewrittenHTML = await processHTML(dom, mjx3Data)
-	console.log(rewrittenHTML)
 	const resultingMarkdown = processMarkdown(rewrittenHTML)
 
 	/* YAML front matter as tags render cleaner with special chars  */
