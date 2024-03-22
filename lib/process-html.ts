@@ -1,12 +1,8 @@
 import { Readability } from '@mozilla/readability';
 import { mathjax2displayType, wrapMathjaxContent } from '@/lib/mathjax';
 import type { math3Obj } from '@/lib/mathjax3';
-import { getReasons, elem } from '@/utils';
+import { getReasons, elem, getCharCount } from '@/utils';
 import { ulid } from 'ulidx';
-
-function getCharCount(el: HTMLElement, s = ",") {
-	return el.innerText.split(s).length - 1;
-}
 
 interface HTMLProcessRule {
 	/** boolean check for the rule. otherwise rule will run always */
@@ -14,7 +10,7 @@ interface HTMLProcessRule {
 	/** for document.querySelectorAll */
 	selector: string,
 	/** rewriter function. return an element if you want it as a replacement */
-	rewrite: (el: HTMLElement, dom: Document, storage: Record<string, number>) => HTMLElement | void
+	rewrite: (el: HTMLElement, dom: Document, storage: HTMLRewriter['storage']) => HTMLElement | void
 }
 
 /**
@@ -27,7 +23,7 @@ export class HTMLRewriter {
 	dom: Document
 	rules: Record<string, HTMLProcessRule>
 	/** only counters for now. */
-	storage: Record<string, number>
+	storage: Record<string, any>
 
 	/**
 	 * @param dom You don't need to pass a dom if use registerDOM later. this allows you to instantiate the rewriter and it's rules whenever, and then regiseter the dom only when needed.
@@ -110,6 +106,7 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 	rewriter.rules['mathjax2'].check = reasons.mathjax2
 	rewriter.rules['katex'].check = reasons.katex
 	rewriter.storage.mjx3NodeCounter = 0
+	rewriter.storage.learnxLang = ''
 
 	rewriter.addRule('mathjax3', {
 		check: reasons.mathjax3 && !!(mathObjs || (dom.querySelector("mjx-container") as HTMLElement)?.dataset?.originalMjx),
@@ -143,26 +140,48 @@ export async function processHTML(dom: Document, mathObjs: math3Obj[]) {
 		keepClasses: true,
 		debug: false,
 	}).parse();
-	// console.log('read', reasons, content)
+	// console.log('read', content)
 	return content;
 }
 
 // site-specific rules
 // feel free to add site specific rules below
 
+// fix some paragraphs not being included in theverge.
 // repro: https://www.theverge.com/2022/10/28/23428132/elon-musk-twitter-acquisition-problems-speech-moderation
 rewriter.addRule('www.theverge.com', {
 	// second url is example for local testing
 	check: document.location.origin === 'https://www.theverge.com' || 
-		(document.location.protocol === 'file:' && document.location.href.endsWith("verge-stripped.html")
-	),
+		(document.location.protocol === 'file:' && document.location.href.endsWith("verge-stripped.html")),
 	selector: '.duet--article--article-body-component',
-	rewrite: (el, dom, storage) => {
+	rewrite(el, dom, storage) {
 		if (el.firstElementChild == null) return;
 		if (getCharCount(el.firstElementChild as HTMLElement, ',') < 10) {
 			const newElem = elem('figure')
 			newElem.append(el.firstElementChild)
 			return newElem
 		}
+	},
+})
+
+// codeblocks on learnxinyminutes.com - get language from title at the top
+rewriter.addRule('learnxinyminutes.com', {
+	check: document.location.origin === 'https://learnxinyminutes.com',
+	selector: 'div.highlight', // later, div.highlight:has(pre)
+	rewrite(el, dom, stor) {
+		if (!stor.learnxLang) { // try to get the language from the h2, e.g. 'Where X=SQL'
+			const langCandidates = [...dom.querySelectorAll('.container > h2')]
+				.filter(el => el.textContent.includes("Where X="))
+			const probableLang = langCandidates[0].textContent.split("=")[1].trim().toLowerCase()
+			stor.learnxLang = (!(probableLang.includes(" "))) ? probableLang : ''
+		}
+		const preEl = elem('pre')
+		const codeEl = elem('code', { innerHTML: el.firstElementChild.innerHTML })
+		if (stor.learnxLang.trim() !== '') {
+			preEl.classList.add(`language-${stor.learnxLang}`)
+			codeEl.classList.add(`language-${stor.learnxLang}`)
+		}
+		preEl.appendChild(codeEl)
+		return preEl
 	},
 })

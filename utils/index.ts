@@ -23,7 +23,8 @@ export function getReasons(dom: Document) {
  */
 export function elem(
 	type: keyof HTMLElementTagNameMap, 
-	options: { 'class'?: string | string[] } & Partial<HTMLElement> = {}
+	options: { 'class'?: string | string[] } & Partial<HTMLElement> = {},
+	...children: HTMLElement[]
 ) {
 	const element = document.createElement(type)
 	if (options.class) {
@@ -36,5 +37,12 @@ export function elem(
 	}
 
 	Object.assign(element, options)
+	if (children.length > 0) {
+		for (const child of children) element.appendChild(child)
+	}
 	return element
+}
+
+export function getCharCount(el: HTMLElement, s = ",") {
+	return el.innerText.split(s).length - 1;
 }
