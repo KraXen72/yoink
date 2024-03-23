@@ -3,7 +3,8 @@ uses [@joplin/turndown](https://github.com/laurent22/joplin/tree/dev/packages/tu
 
 originally based on [kepano's obsidian web clipper bookmarklet](https://gist.github.com/kepano/90c05f162c37cf730abb8ff027987ca3)  
 
-work in progress.
+work in progress.  
+if this looks interesting, feel free to help! i likely won't finish it any time soon.
 
 ## aim
 - support most of markdownload's extraction features
