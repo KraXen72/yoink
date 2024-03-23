@@ -17,6 +17,11 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
+
+	--sb-track-color: #282c34;
+	--sb-thumb-color: #51555d;
+	/* --sb-thumb-color: #7d8799; */
+	--sb-size: 8px;
 }
 
 html {
@@ -37,4 +42,35 @@ main {
 	height: 100vh;
 }
 
-.cm-editor { height: 100%; }
+.cm-scroller::-webkit-scrollbar {
+	width: var(--sb-size)
+}
+
+.cm-scroller::-webkit-scrollbar-track {
+	background: var(--sb-track-color);
+	border-radius: 3px;
+}
+
+.cm-scroller::-webkit-scrollbar-thumb {
+	background: var(--sb-thumb-color);
+	border-radius: 3px;
+	border: 1px solid #282c34;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+	.cm-scroller {
+		scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+	}
+}
+
+.cm-editor {
+	height: 100%;
+}
+
+.btn {
+	@apply bg-bbg p-1 rounded-md w-max h-max 
+		border-[1px] border-solid
+		hover:bg-hlbg active:bg-sel;
+	border-color: rgba(171, 178, 191, 0.6);
+	color: rgba(255, 255, 255, 0.78);
+}

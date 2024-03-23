@@ -9,7 +9,47 @@
 </head>
 <body>
 	<main class="overflow-x-auto">
-		<button id="process-btn" class="h-8">process</button>
+		<div class="flex gap-x-2 h-10 items-center px-2 bg-bbg2">
+			<button id="process-btn" title="Download current page"
+			class="btn"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 2v14m7-7l-7 7l-7-7"/><circle cx="12" cy="21" r="1"/></g></svg>
+			</button>
+			<span>|</span>
+			<form>
+				<fieldset class="flex gap-x-2 h-full">
+					<div>
+						<input type="radio" name="extractdom" id="rad-wholedoc" class="hidden peer" checked>
+						<label for="rad-wholedoc"
+							class="btn peer-checked:border-od-cyan peer-checked:bg-od-cyan/30 cursor-pointer peer-disabled:opacity-50 inline-flex select-none"
+						>Document</label>
+					</div>
+					<div>
+						<input type="radio" name="extractdom" id="rad-selection" class="hidden peer" >
+						<label for="rad-selection"
+							class="btn peer-checked:border-od-cyan peer-checked:bg-od-cyan/30 cursor-pointer peer-disabled:opacity-50 inline-flex select-none"
+						>Selection</label>
+					</div>
+					<div>
+						<input type="radio" name="extractdom" id="rad-iframe" class="hidden peer" >
+						<label for="rad-iframe"
+							class="btn peer-checked:border-od-cyan peer-checked:bg-od-cyan/30 cursor-pointer peer-disabled:opacity-50
+							w-full inline-flex gap-x-2 select-none"
+						>
+							Iframe
+							<select name="iframe" id="iframe-sel" 
+								class="w-32 overflow-clip outline-none cursor-pointer"
+							>
+								<option value="no">Document without iframes</option>
+								<option value="1">1: https://delft.edx.org</option>
+								<option value="2">2: https://ads.googlesyndication.com</option>
+							</select>
+						</label>
+					</div>
+				</fieldset>
+			</form>
+			
+		</div>
 		<div id="cm-wrapper" class="overflow-y-auto h-full"></div>
 	</main>
 	<script type="module" src="./main.ts"></script>

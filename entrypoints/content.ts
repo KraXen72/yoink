@@ -1,7 +1,7 @@
 import { processContent } from "@/lib/processor"
 import { HTMLRewriter } from "@/lib/process-html";
 import { mathjax3unneededPayload } from "@/lib/mathjax3";
-import { getReasons } from "@/utils";
+import { getReasons, getSelectionHTML } from "@/utils";
 import type { mathJax3Payload } from "@/lib/mathjax3"
 import type { protocol } from "@/lib/types";
 import type { Runtime } from "wxt/browser";
@@ -17,16 +17,11 @@ interface IExtraData {
 const iframeMap = new Map<string, string>()
 const iframeContents = {}
 let extraData: IExtraData = { mathjaxResult: null };
-
-function getSelectionHtml() {
-	const sel = window.getSelection();
-	if (!sel.rangeCount) return '';
-	const container = document.createElement("div");
-	for (let i = 0; i < sel.rangeCount; ++i) {
-		container.appendChild(sel.getRangeAt(i).cloneContents());
-	}
-	return container.innerHTML;
-}
+let somethingSelected = false;
+/** anchor */
+let selStart = -1 
+/** focus */
+let selEnd = -1
 
 export default defineContentScript({
 	matches: ['<all_urls>'],
@@ -50,6 +45,24 @@ export default defineContentScript({
 				cmd: 'iframe-init-ulid', 
 			} satisfies protocol)
 		}
+
+		document.addEventListener("selectionchange", (e) => {
+			const sel = window.getSelection()
+			const isSel = sel.rangeCount ? true : false;
+			
+			// todo better check? maybe use browser.tabs.executeScript?
+			if (somethingSelected !== isSel || selStart !== sel.anchorOffset || selEnd !== sel.focusOffset) {
+				console.log(sel)
+				browser.runtime.sendMessage({ 
+					for: 'popup',
+					from: 'content', 
+					type: 'forward',
+					cmd: 'selectionchange',
+					data: { exists: sel },
+					html: sel ? getSelectionHTML() : ''
+				} satisfies protocol)
+			}
+		})
 	}
 });
 
@@ -94,7 +107,7 @@ async function msgCallback(request: protocol, sender: Runtime.MessageSender, sen
 }
 
 function getSelOrDOM() {
-	const selHTML = getSelectionHtml()
+	const selHTML = getSelectionHTML()
 	if (selHTML !== '') {
 		return selHTML
 	} else {

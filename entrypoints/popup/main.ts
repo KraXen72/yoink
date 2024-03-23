@@ -39,7 +39,7 @@ let view = new EditorView({
 			...completionKeymap,
 		]),
 		EditorView.lineWrapping,
-		wrappedLineIndent,
+		// wrappedLineIndent,
 		markdown({ codeLanguages: languages, extensions: [ frontmatter ] }),
 	],
 	parent: document.getElementById("cm-wrapper"),
@@ -64,6 +64,9 @@ browser.runtime.onMessage.addListener((request: protocol) => {
 	if (request?.for !== 'popup') return;
 	if (request?.cmd === "set-codemirror" && typeof request?.data?.content === 'string') {
 		setContent(request.data.content)
+	}
+	if (request?.cmd === 'selectionchange') {
+		console.log(request.data, request.html)
 	}
 	console.log('recieved:', request)
 	// view.state.update({ changes: { 

@@ -16,6 +16,20 @@ export function getReasons(dom: Document) {
 	};
 }
 
+export function getSelectionHTML() {
+	const sel = window.getSelection();
+	if (!sel.rangeCount) return '';
+	const container = document.createElement("div");
+	for (let i = 0; i < sel.rangeCount; ++i) {
+		container.appendChild(sel.getRangeAt(i).cloneContents());
+	}
+	return container.innerHTML;
+}
+export function selectionExists() {
+	const sel = window.getSelection();
+	return sel.rangeCount ? true : false;
+}
+
 /**
  * create a dom element given an object of properties
  * @param type element type, e.g. "div"
