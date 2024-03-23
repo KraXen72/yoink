@@ -14,10 +14,12 @@ work in progress.
   - [x] mathjax v2
   - [x] katex
 - extra features
+  - [x] typescript
+  - [x] manifest v3
   - [x] mathjax v3
   - [x] mathjax v2 type `math/asciimath`
   - [x] assume codeblock language for syntax highlighting
-  - [x] frontmatter highlighting
+  - [x] frontmatter highlighting in popup
   - [x] extract content from iframes 
   - [ ] set image size for obsidian-style images
 - likely won't be implemented
