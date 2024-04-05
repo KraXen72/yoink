@@ -1,8 +1,9 @@
 {
   "extends": "./.wxt/tsconfig.json",
   "compilerOptions": {
-	"strictNullChecks": false,
-	"noImplicitAny": false,
-	"sourceMap": true
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "jsx": "react"
   }
 }

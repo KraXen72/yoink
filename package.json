@@ -38,6 +38,7 @@
     "@lezer/highlight": "^1.2.0",
     "@lezer/markdown": "^1.2.0",
     "codemirror-wrapped-line-indent": "^1.0.8",
+    "dom-chef": "^5.1.1",
     "ulidx": "^2.3.0"
   }
 }
