@@ -1,3 +1,8 @@
+> [!NOTE]
+> Superseeded by Obsidian's official [web clipper](https://obsidian.md/clipper) ([git repo](https://github.com/obsidianmd/obsidian-clipper)). Use that.
+  
+-------
+  
 # yoink - web clipper for obsidian
 uses [@joplin/turndown](https://github.com/laurent22/joplin/tree/dev/packages/turndown), [readability](https://github.com/mozilla/readability) and [wxt](https://github.com/wxt-dev/wxt), among others.
 
